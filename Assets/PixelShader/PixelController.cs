@@ -10,25 +10,25 @@ public class PixelController : MonoBehaviour
 
     void Start()
     {
-        propX= 256; 
-        propY= 144;
-        InvokeRepeating("Transicao",0,speed/100);
+        propX= 144; 
+        propY= 256;
+        InvokeRepeating("Transicao",0,speed/10);
     }
     void Transicao()
     {
         loaded += speed;
-        print(loaded);
         if(loaded >= 1)
         {
             CancelInvoke("Transicao");
-            propX= 256; 
-            propY= 144;
-            materialAfetado.SetFloat("_Linhas", propX * loaded);
-            materialAfetado.SetFloat("_Colunas", propY * loaded);
+            propX= 144; 
+            propY= 256;
+            materialAfetado.SetFloat("_Linhas", propX);
+            materialAfetado.SetFloat("_Colunas", propY);
+            return; 
         }
 
         materialAfetado.SetFloat("_Linhas", propX * loaded);
-        materialAfetado.SetFloat("_Colunas", propY * loaded);
+        materialAfetado.SetFloat("_Colunas", propY * loaded); 
         
     }
     // Update is called once per frame

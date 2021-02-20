@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 6865f13ba363086488749546751ed936, type: 3}
+        m_Texture: {fileID: 2800000, guid: e2bbe305b052873448a81341e06eef1e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -74,4 +74,4 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.990566, g: 0.89035326, b: 0.70554465, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.13207549, g: 0.0043609855, b: 0.09512519, a: 1}
