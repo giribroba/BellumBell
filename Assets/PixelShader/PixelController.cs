@@ -6,7 +6,7 @@ public class PixelController : MonoBehaviour
     public Material materialAfetado;
     public float speed;
     int propX,propY;
-    float loaded ;
+    float loaded;
 
     void Start()
     {
@@ -31,11 +31,7 @@ public class PixelController : MonoBehaviour
         materialAfetado.SetFloat("_Colunas", propY * loaded); 
         
     }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
     void OnRenderImage(RenderTexture origem,RenderTexture destinado)
     {
         Graphics.Blit(origem,destinado,materialAfetado);
