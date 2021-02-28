@@ -36,20 +36,21 @@ public class CameraBehaviour : MonoBehaviour
 
         AngulacaoFinal = novaAngulacaoF;
         PosicaoFinal = novaPosicaoF;
+        
         x = 0;
+
         StartCoroutine("MovimentarCamera");
 
 
     }
     IEnumerator MovimentarCamera() {
-    
         while(x<= 1){
 
             x += (velocidadeAnimacao * Time.deltaTime);
             y = -x * x + 2 * x;
             
             Quaternion newEulerAngle = Quaternion.Euler(AngulacaoFinal);
-            transform.rotation = Quaternion.SlerpUnclamped(transform.rotation, newEulerAngle,y/10);
+            transform.rotation = Quaternion.SlerpUnclamped(transform.rotation, newEulerAngle,x/10);
             transform.localPosition = Vector3.Lerp(PosicaoInicial,PosicaoFinal, y);
             yield return null;
        } 

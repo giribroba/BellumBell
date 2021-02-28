@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class LojaBehaviour : MonoBehaviour
 {
-    public GameObject[,] itens;
-    public int linhas,colunas;
-    public float distanciamentoX,distanciamentoY,offsetX,offsetY;
+    public Vector2 tamanho,distanciamento,offset;
     public GameObject PLACEHOLDER;
     Vector3 posicaoCameraInicial,AngulacaoInicial;
+    GameObject[,] itens;  
     
     void EntrandoLoja()
     {
-        Camera.main.GetComponent<CameraBehaviour>().SetPosicaoCamera(posicaoCameraInicial,AngulacaoInicial);
+        Camera.main.GetComponent<CameraBehaviour>().SetPosicaoCamera(new Vector3(26,4,38),new Vector3(9.5f,-53f,-0.9f));
     }
     void Awake()
     {
-        itens = new GameObject[linhas,colunas];
+        itens = new GameObject[(int)tamanho.x,(int)tamanho.y];
         DeclararItens();
     }
     void DeclararItens()
@@ -26,15 +25,15 @@ public class LojaBehaviour : MonoBehaviour
             for(int k = 0;k<itens.GetLength(1);k++)
             {
                 itens[i,k] = Instantiate(PLACEHOLDER);
-                itens[i,k].transform.position = transform.position + new Vector3(distanciamentoX * k + offsetX,distanciamentoY * i + offsetY);
+                itens[i,k].transform.position = transform.position + new Vector3(distanciamento.x * k + offset.x,distanciamento.y * i + offset.y);
                 itens[i,k].transform.eulerAngles = new Vector3(15,0,0);
-                itens[i,k].transform.name = i.ToString() + k.ToString();
             }    
         }
 
     }
     void Update()
     {
+        // placeholder test
         if(Input.GetKeyDown(KeyCode.Z))
         {
             EntrandoLoja();

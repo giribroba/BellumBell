@@ -57,14 +57,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _Colunas: 256
+    - _Colunas: 512
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Linhas: 144
+    - _Linhas: 288
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
