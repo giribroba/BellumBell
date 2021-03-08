@@ -33,10 +33,11 @@ public class LojaBehaviour : MonoBehaviour
     }
     void Update()
     {
-        // placeholder test
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            EntrandoLoja();
-        }
+        // atualizar pro new input system   
+        // // placeholder test
+        // if(Input.GetKeyDown(KeyCode.Z))
+        // {
+        //     EntrandoLoja();
+        // }
     }
 }

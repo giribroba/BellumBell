@@ -10,8 +10,8 @@ public class PixelController : MonoBehaviour
 
     void Start()
     {
-        propX= 144; 
-        propY= 256;
+        propX= 180; 
+        propY= 320;
         InvokeRepeating("Transicao",0,speed/10);
     }
     void Transicao()
@@ -20,8 +20,8 @@ public class PixelController : MonoBehaviour
         if(loaded >= 1)
         {
             CancelInvoke("Transicao");
-            propX= 144; 
-            propY= 256;
+            propX= 180  ; 
+            propY= 320;
             materialAfetado.SetFloat("_Linhas", propX);
             materialAfetado.SetFloat("_Colunas", propY);
             return; 
