@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour
 {
+
     public float velocidadeAnimacao = 1f;
     float x,y;
     bool seguirPlayer;
-    
+
 
     public Vector3   PosicaoInicial
     {
