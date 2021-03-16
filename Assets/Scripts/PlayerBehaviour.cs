@@ -6,12 +6,12 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public CharacterController controle;
     public Transform cam;
-    public float velocidade;
+    public float velocidade,velocidadeAtual;
     public float tempoSuavidade;
     float tornarSuave;
     void Start()
     {
-        
+        velocidadeAtual = velocidade;
     }
 
     // Update is called once per frame
@@ -23,10 +23,11 @@ public class PlayerBehaviour : MonoBehaviour
     {
       Vector3 movement = Vector3.zero;
       float v = Input.GetAxis("Vertical");
-      float h = Input.GetAxis("Horizontal");
-      transform.Rotate(Vector3.up *h);
+      float h = Input.GetAxisRaw("Horizontal");
+      velocidadeAtual =Input.GetKey(KeyCode.LeftShift)? velocidade*2f:velocidade;
+      transform.Rotate(Vector3.up *h *velocidadeAtual/(velocidade +30));
       transform.GetComponent<Animator>().SetFloat("Velocidade",controle.velocity.magnitude);
-      movement += transform.forward * v * velocidade * Time.deltaTime;
+      movement += transform.forward * v * velocidadeAtual * Time.deltaTime;
       controle.Move(movement);
       //movement += transform.right * h * velocidade * Time.deltaTime;
       //movement = transform.TransformDirection(movement);
