@@ -16,8 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
     float v,h;
     void Awake()
     {
-       #if UNITY_ANDROID 
-       //|| UNITY_EDITOR
+       #if UNITY_ANDROID // || UNITY_EDITOR
         Canvas joysticks = Instantiate(JoystickCanvasMobile);
         joyPlayer = joysticks.transform.GetChild(2).GetComponent<Joystick>();
         joyCamera = joysticks.transform.GetChild(1).GetComponent<Joystick>();
@@ -50,8 +49,7 @@ public class PlayerBehaviour : MonoBehaviour
         velocidadeCorrida = Mathf.Clamp(Input.GetKey(KeyCode.LeftShift)? velocidadeCorrida  + Time.deltaTime * 80  : velocidadeCorrida,velocidade ,velocidade*2);
         #endif
 
-        #if UNITY_ANDROID
-        // || UNITY_EDITOR
+        #if UNITY_ANDROID //|| UNITY_EDITOR
         v = joyPlayer.Vertical;
         cinemachine.m_YAxis.Value += joyCamera.Vertical/60;
         cinemachine.m_XAxis.Value += joyCamera.Horizontal;
