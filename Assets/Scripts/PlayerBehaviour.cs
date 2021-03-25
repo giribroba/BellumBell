@@ -16,8 +16,9 @@ public class PlayerBehaviour : MonoBehaviour
     float v,h;
     void Awake()
     {
-       #if UNITY_ANDROID  || UNITY_EDITOR
+       #if UNITY_ANDROID // || UNITY_EDITOR
         Canvas joysticks = Instantiate(JoystickCanvasMobile);
+        joysticks.worldCamera = Camera.main;
         joyPlayer = joysticks.transform.GetChild(2).GetComponent<Joystick>();
         joyCamera = joysticks.transform.GetChild(1).GetComponent<Joystick>();
         cinemachine.m_YAxis.m_InputAxisName ="";
@@ -49,7 +50,7 @@ public class PlayerBehaviour : MonoBehaviour
         velocidadeCorrida = Mathf.Clamp(Input.GetKey(KeyCode.LeftShift)? velocidadeCorrida  + Time.deltaTime * 80  : velocidadeCorrida,velocidade ,velocidade*2);
         #endif
 
-        #if UNITY_ANDROID   || UNITY_EDITOR
+        #if UNITY_ANDROID  // || UNITY_EDITOR
         v = joyPlayer.Vertical;
         cinemachine.m_YAxis.Value += joyCamera.Vertical/60;
         cinemachine.m_XAxis.Value += joyCamera.Horizontal;
@@ -61,7 +62,7 @@ public class PlayerBehaviour : MonoBehaviour
         //caso ele fique parado em uma parede apertando w + shift, ele ja não saia correndo sem antes acelerar
         velocidadeCorrida = controle.velocity.magnitude <= 33 ? velocidade : velocidadeCorrida;
 
-        transform.Rotate(Vector3.up *h *velocidadeCorrida /(velocidade +10)); 
+        transform.Rotate(Vector3.up *h *velocidadeCorrida /(velocidade +10)* Time.deltaTime * 150); 
 
         transform.GetComponent<Animator>().SetFloat("Velocidade",controle.velocity.magnitude * v);
 
