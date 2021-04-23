@@ -433,7 +433,7 @@ PlayerSettings:
     iPhone: 1
     tvOS: 1
   m_BuildTargetGroupLightmapEncodingQuality:
-<<<<<<< HEAD
+
   - m_BuildTarget: Standalone
     m_EncodingQuality: 2
   - m_BuildTarget: Android
@@ -442,11 +442,7 @@ PlayerSettings:
   - m_BuildTarget: Android
     m_TextureStreamingEnabled: 1
     m_TextureStreamingPriority: 0
-=======
-  - m_BuildTarget: Android
-    m_EncodingQuality: 1
-  m_BuildTargetGroupLightmapSettings: []
->>>>>>> 4e18f61a334418c2d7bd7e76b57c3f7774d55132
+
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1
