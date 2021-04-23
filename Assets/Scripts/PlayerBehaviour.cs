@@ -16,7 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
     float v,h;
     void Awake()
     {
-       #if UNITY_ANDROID // || UNITY_EDITOR
+       #if UNITY_ANDROID //|| UNITY_EDITOR
         Canvas joysticks = Instantiate(JoystickCanvasMobile);
         joysticks.worldCamera = Camera.main;
         joyPlayer = joysticks.transform.GetChild(2).GetComponent<Joystick>();
