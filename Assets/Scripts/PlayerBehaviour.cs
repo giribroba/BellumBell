@@ -4,7 +4,8 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     public CharacterController control;
-    public CinemachineFreeLook cinemachine;
+    public CinemachineVirtualCamera cinemachine;
+    CinemachinePOV POV;
     public Canvas JoystickCanvasMobile;
     public float normalSpeed;
     public float suavityTime;
@@ -15,29 +16,25 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] AnimationCurve speedCurve;
     Quaternion targetRotation;
     [SerializeField] float rotationSpeed;
-    Vector3 moviment;
+    Vector3 movement;
     void Awake()
     {
 #if UNITY_ANDROID
         Canvas joysticks = Instantiate(JoystickCanvasMobile);
         joysticks.worldCamera = Camera.main;
-        joyPlayer = joysticks.transform.GetChild(2).GetComponent<Joystick>();
-        joyCamera = joysticks.transform.GetChild(3).GetComponent<Joystick>();
-        cinemachine.m_YAxis.m_InputAxisName ="";
-        cinemachine.m_XAxis.m_InputAxisName ="";
-        velocidade = velocidade * 1.05f;
-#endif
-    }
-    void Start()
-    {
-        Cursor.visible = false;
+        joyPlayer = joysticks.transform.GetChild(3).GetComponent<Joystick>();
+        POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
+        joyCamera = joysticks.transform.GetChild(2).GetComponent<Joystick>();
+        POV.m_HorizontalAxis.m_InputAxisName = "";
+        POV.m_VerticalAxis.m_InputAxisName = "";
+#else
         Cursor.lockState = CursorLockMode.Locked;
-        runSpeed = normalSpeed;
+        Cursor.visible = false;
+#endif
     }
 
     void Update()
     {
-
         Movimentacao();
     }
     public void BotaoInteracao_A()
@@ -51,44 +48,48 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Movimentacao()
     {
-
-        //Vector3 movimento = Vector3.zero;
-
 #if UNITY_STANDALONE
         v = Input.GetAxis("Vertical");
         h = Input.GetAxis("Horizontal");
-        runSpeed = Input.GetKey(KeyCode.LeftShift) ? normalSpeed * 2 : normalSpeed;
 #endif
 
 #if UNITY_ANDROID
         v = joyPlayer.Vertical;
-        cinemachine.m_YAxis.Value += joyCamera.Vertical/60;
-        cinemachine.m_XAxis.Value += joyCamera.Horizontal;
+        POV.m_HorizontalAxis.m_InputAxisValue = joyCamera.Horizontal;
+        POV.m_VerticalAxis.m_InputAxisValue = joyCamera.Vertical;
+        //cinemachine.m_XAxis.Value += joyCamera.Horizontal;
         h = joyPlayer.Horizontal;
-        velocidadeCorrida = Mathf.Clamp(velocidadeCorrida  + Time.deltaTime * 80  ,velocidade ,velocidade*2f);
+        //runSpeed = Mathf.Clamp(runSpeed  + Time.deltaTime * 80  ,speed ,velocidade*2f);
 #endif
 
-        //caso ele fique parado em uma parede apertando w + shift, ele ja não saia correndo sem antes acelerar
-        //runSpeed = control.velocity.magnitude <= 33 ? normalSpeed : runSpeed;
-
-        if (Input.GetAxisRaw("Vertical") != 0 || Input.GetAxisRaw("Horizontal") != 0)
+        if (v != 0 || h != 0)
         {
-            targetRotation = Quaternion.Euler(0f, Camera.main.transform.eulerAngles.y + Mathf.Atan(h / v) * 180 / Mathf.PI + (v < 0 ? 180 : 0), 0f);
+            var angleOffset = Mathf.Atan(h / v) * 180 / Mathf.PI;
+            targetRotation = Quaternion.Euler(0f, Camera.main.transform.eulerAngles.y + (float.IsNaN(angleOffset) ? 0 : angleOffset) + (v < 0 ? 180 : 0), 0f);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            moveTime = (moveTime >= 1? 1 : moveTime + Time.deltaTime);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                moveTime = (moveTime >= 1 ? 1 : moveTime + Time.deltaTime);
+            }
+            else
+            {
+                moveTime += (moveTime >= 0.5f ? -4 * Time.deltaTime : Time.deltaTime);
+            }
         }
         else
         {
-            moveTime = (moveTime <= 0 ? 0 : moveTime - 4*Time.deltaTime);
+            moveTime = (moveTime <= 0 ? 0 : moveTime - 4 * Time.deltaTime);
         }
 
-        moviment = transform.forward * speedCurve.Evaluate(moveTime) * runSpeed * Time.deltaTime;
-        
+        print(h);
+
+        movement = transform.forward * speedCurve.Evaluate(moveTime) * normalSpeed * Time.deltaTime;
+
         transform.GetComponent<Animator>().SetFloat("Velocidade", control.velocity.magnitude);
 
-        moviment += Physics.gravity / 20;
+        movement += Physics.gravity / 20;
 
-        control.Move(moviment);
+        control.Move(movement);
 
     }
 }
