@@ -95,6 +95,7 @@ MonoBehaviour:
   snapY: 1
   background: {fileID: 2608670357941593846}
   handle: {fileID: 2608670359834322188}
+  input: {x: 0, y: 0}
 --- !u!1 &2608670359834322189
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +121,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2608670359834322189}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children: []
@@ -264,5 +265,6 @@ MonoBehaviour:
   snapY: 0
   background: {fileID: 2608670357941593846}
   handle: {fileID: 2608670359834322188}
+  input: {x: 0, y: 0}
   moveThreshold: 1
   joystickType: 0

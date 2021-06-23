@@ -22,9 +22,9 @@ public class PlayerBehaviour : MonoBehaviour
 #if UNITY_ANDROID
         Canvas joysticks = Instantiate(JoystickCanvasMobile);
         joysticks.worldCamera = Camera.main;
-        joyPlayer = joysticks.transform.GetChild(3).GetComponent<Joystick>();
+        joyPlayer = GameObject.Find("JoystickPlayer").GetComponent<Joystick>();
         POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
-        joyCamera = joysticks.transform.GetChild(2).GetComponent<Joystick>();
+        joyCamera = GameObject.Find("JoystickCamera").GetComponent<Joystick>();
         POV.m_HorizontalAxis.m_InputAxisName = "";
         POV.m_VerticalAxis.m_InputAxisName = "";
 #else
@@ -54,11 +54,11 @@ public class PlayerBehaviour : MonoBehaviour
 #endif
 
 #if UNITY_ANDROID
-        v = joyPlayer.Vertical;
+        v = joyPlayer.Vertical * 6;
         POV.m_HorizontalAxis.m_InputAxisValue = joyCamera.Horizontal;
         POV.m_VerticalAxis.m_InputAxisValue = joyCamera.Vertical;
         //cinemachine.m_XAxis.Value += joyCamera.Horizontal;
-        h = joyPlayer.Horizontal;
+        h = joyPlayer.Horizontal * 6;
         //runSpeed = Mathf.Clamp(runSpeed  + Time.deltaTime * 80  ,speed ,velocidade*2f);
 #endif
 
@@ -73,15 +73,13 @@ public class PlayerBehaviour : MonoBehaviour
             }
             else
             {
-                moveTime += (moveTime >= 0.5f ? -4 * Time.deltaTime : Time.deltaTime);
+                moveTime += (moveTime >= 0.5f ? -2 * Time.deltaTime : Time.deltaTime);
             }
         }
         else
         {
             moveTime = (moveTime <= 0 ? 0 : moveTime - 4 * Time.deltaTime);
         }
-
-        print(h);
 
         movement = transform.forward * speedCurve.Evaluate(moveTime) * normalSpeed * Time.deltaTime;
 

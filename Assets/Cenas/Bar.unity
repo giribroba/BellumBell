@@ -2718,7 +2718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   control: {fileID: 946598867}
   cinemachine: {fileID: 1647445508}
-  JoystickCanvasMobile: {fileID: 8237083653724781911, guid: 8b7f6367062c95d4cb6bb54b0a5357ad,
+  JoystickCanvasMobile: {fileID: 5641161278100820954, guid: 9cba056224b9a4046a293194781440cc,
     type: 3}
   normalSpeed: 60
   suavityTime: 30
