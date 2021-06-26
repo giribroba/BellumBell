@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    public CharacterController control;
-    public CinemachineVirtualCamera cinemachine;
+    [SerializeField] CharacterController control;
+    [SerializeField] CinemachineVirtualCamera cinemachine;
     CinemachinePOV POV;
-    public Canvas JoystickCanvasMobile;
-    public float normalSpeed;
-    public float suavityTime;
+    [SerializeField] Canvas canvas;
+    [SerializeField] float normalSpeed;
+    [SerializeField] float suavityTime;
     Joystick joyPlayer, joyCamera;
+    [SerializeField] GameObject panel;
+    [SerializeField] GameObject mobileHud;
     float runSpeed;
     float v, h;
     float moveTime;
@@ -17,11 +19,11 @@ public class PlayerBehaviour : MonoBehaviour
     Quaternion targetRotation;
     [SerializeField] float rotationSpeed;
     Vector3 movement;
+
     void Awake()
     {
 #if UNITY_ANDROID
-        Canvas joysticks = Instantiate(JoystickCanvasMobile);
-        joysticks.worldCamera = Camera.main;
+        mobileHud.SetActive(true);
         joyPlayer = GameObject.Find("JoystickPlayer").GetComponent<Joystick>();
         POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
         joyCamera = GameObject.Find("JoystickCamera").GetComponent<Joystick>();
@@ -87,7 +89,29 @@ public class PlayerBehaviour : MonoBehaviour
 
         movement += Physics.gravity / 20;
 
-        control.Move(movement);
+        control.Move(movement);   
+    }
+    private void ShowPanel(GameObject panel)
+    {
+    }
+    private void ClosePanel(GameObject panel)
+    {
+    }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.tag == "AreaTrigger")
+        {
+            print("1");
+            ShowPanel(panel);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "AreaTrigger")
+        {
+            print("2");
+            ClosePanel(panel);
+        }
     }
 }
