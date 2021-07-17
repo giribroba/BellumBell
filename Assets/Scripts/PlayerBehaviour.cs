@@ -3,35 +3,36 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    [SerializeField] CharacterController control;
+    [SerializeField] CharacterController controll;
     [SerializeField] CinemachineVirtualCamera cinemachine;
-    CinemachinePOV POV;
     [SerializeField] Canvas canvas;
-    [SerializeField] float normalSpeed;
-    [SerializeField] float suavityTime;
-    Joystick joyPlayer, joyCamera;
-    [SerializeField] GameObject panel;
-    [SerializeField] GameObject mobileHud;
-    float runSpeed;
-    float v, h;
-    float moveTime;
+    [SerializeField] float normalSpeed, suavityTime, rotationSpeed;
+    [SerializeField] GameObject panel , mobileHud;
     [SerializeField] AnimationCurve speedCurve;
+
+    ControllerBinds cBinds =  new ConfigMenu().CrrntBinds;
+    CinemachinePOV POV;
+    Joystick joyPlayer, joyCamera;
+    float vertical, horizontal, moveTime;
     Quaternion targetRotation;
-    [SerializeField] float rotationSpeed;
     Vector3 movement;
 
     void Awake()
     {
-#if UNITY_ANDROID
+        POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
+        POV.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
+        POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
+        POV.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
+        POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
+#if UNITY_STANDALONE
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+#elif UNITY_ANDROID
         mobileHud.SetActive(true);
         joyPlayer = GameObject.Find("JoystickPlayer").GetComponent<Joystick>();
-        POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
         joyCamera = GameObject.Find("JoystickCamera").GetComponent<Joystick>();
         POV.m_HorizontalAxis.m_InputAxisName = "";
         POV.m_VerticalAxis.m_InputAxisName = "";
-#else
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 #endif
     }
 
@@ -39,37 +40,27 @@ public class PlayerBehaviour : MonoBehaviour
     {
         Movimentacao();
     }
-    public void BotaoInteracao_A()
-    {
-        print("pei pou");
-    }
-    public void BotaoInteracao_B()
-    {
-        print("POOOOOOOOOUW");
-    }
 
-    void Movimentacao()
+    private void Movimentacao()
     {
 #if UNITY_STANDALONE
-        v = Input.GetAxis("Vertical");
-        h = Input.GetAxis("Horizontal");
-#endif
-
-#if UNITY_ANDROID
-        v = joyPlayer.Vertical * 6;
+        vertical = cBinds.Axis(vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
+        horizontal = cBinds.Axis(horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
+#elif UNITY_ANDROID
+        vertical = joyPlayer.Vertical * 6;
         POV.m_HorizontalAxis.m_InputAxisValue = joyCamera.Horizontal;
         POV.m_VerticalAxis.m_InputAxisValue = joyCamera.Vertical;
         //cinemachine.m_XAxis.Value += joyCamera.Horizontal;
-        h = joyPlayer.Horizontal * 6;
-        //runSpeed = Mathf.Clamp(runSpeed  + Time.deltaTime * 80  ,speed ,velocidade*2f);
+        horizontal = joyPlayer.Horizontal * 6;
 #endif
 
-        if (v != 0 || h != 0)
+        if (vertical != 0 || horizontal != 0)
         {
-            var angleOffset = Mathf.Atan(h / v) * 180 / Mathf.PI;
-            targetRotation = Quaternion.Euler(0f, Camera.main.transform.eulerAngles.y + (float.IsNaN(angleOffset) ? 0 : angleOffset) + (v < 0 ? 180 : 0), 0f);
+            var angleOffset = Mathf.Atan(horizontal / vertical) * 180 / Mathf.PI;
+            targetRotation = Quaternion.Euler(0f, Camera.main.transform.eulerAngles.y + (float.IsNaN(angleOffset) ? 0 : angleOffset) + (vertical < 0 ? 180 : 0), 0f);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            if (Input.GetKey(KeyCode.LeftShift))
+
+            if (Input.GetKey(cBinds.GetKey("Run")))
             {
                 moveTime = (moveTime >= 1 ? 1 : moveTime + Time.deltaTime);
             }
@@ -85,12 +76,22 @@ public class PlayerBehaviour : MonoBehaviour
 
         movement = transform.forward * speedCurve.Evaluate(moveTime) * normalSpeed * Time.deltaTime;
 
-        transform.GetComponent<Animator>().SetFloat("Velocidade", control.velocity.magnitude);
+        transform.GetComponent<Animator>().SetFloat("Velocidade", controll.velocity.magnitude);
 
         movement += Physics.gravity / 20;
 
-        control.Move(movement);   
+        controll.Move(movement);   
     }
+
+    public void BotaoInteracao_A()
+    {
+        print("pei pou");
+    }
+    public void BotaoInteracao_B()
+    {
+        print("POOOOOOOOOUW");
+    }
+
     private void ShowPanel(GameObject panel)
     {
     }
@@ -102,7 +103,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if(other.tag == "AreaTrigger")
         {
-            print("1");
+            //print("1");
             ShowPanel(panel);
         }
     }
@@ -110,7 +111,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (other.tag == "AreaTrigger")
         {
-            print("2");
+            //print("2");
             ClosePanel(panel);
         }
     }

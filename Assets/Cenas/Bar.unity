@@ -2083,8 +2083,8 @@ MonoBehaviour:
   m_RecenterTarget: 0
   m_VerticalAxis:
     Value: 0
-    m_SpeedMode: 0
-    m_MaxSpeed: 300
+    m_SpeedMode: 1
+    m_MaxSpeed: 2
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
@@ -2107,8 +2107,8 @@ MonoBehaviour:
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
     Value: 0
-    m_SpeedMode: 0
-    m_MaxSpeed: 300
+    m_SpeedMode: 1
+    m_MaxSpeed: 2
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -2796,13 +2796,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2394db5543e87bf49bf9092e387d1676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  control: {fileID: 946598867}
+  controll: {fileID: 946598867}
   cinemachine: {fileID: 1647445508}
-  JoystickCanvasMobile: {fileID: 5641161278100820954, guid: 9cba056224b9a4046a293194781440cc,
-    type: 3}
+  canvas: {fileID: 2499853347922614859}
   normalSpeed: 60
   suavityTime: 30
-  mobileHud: {fileID: 0}
+  rotationSpeed: 800
+  panel: {fileID: 709260687}
+  mobileHud: {fileID: 5788522453569997166}
   speedCurve:
     serializedVersion: 2
     m_Curve:
@@ -2836,7 +2837,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 500
 --- !u!1 &999399376
 GameObject:
   m_ObjectHideFlags: 0
