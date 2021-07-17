@@ -38,20 +38,20 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Update()
     {
-        Movimentacao();
+        Movimentation();
     }
 
-    private void Movimentacao()
+    private void Movimentation()
     {
 #if UNITY_STANDALONE
-        vertical = cBinds.Axis(vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
-        horizontal = cBinds.Axis(horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
+            vertical = cBinds.Axis(vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
+            horizontal = cBinds.Axis(horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
 #elif UNITY_ANDROID
-        vertical = joyPlayer.Vertical * 6;
-        POV.m_HorizontalAxis.m_InputAxisValue = joyCamera.Horizontal;
-        POV.m_VerticalAxis.m_InputAxisValue = joyCamera.Vertical;
-        //cinemachine.m_XAxis.Value += joyCamera.Horizontal;
-        horizontal = joyPlayer.Horizontal * 6;
+            vertical = joyPlayer.Vertical * 6;
+            POV.m_HorizontalAxis.m_InputAxisValue = joyCamera.Horizontal;
+            POV.m_VerticalAxis.m_InputAxisValue = joyCamera.Vertical;
+            //cinemachine.m_XAxis.Value += joyCamera.Horizontal;
+            horizontal = joyPlayer.Horizontal * 6;
 #endif
 
         if (vertical != 0 || horizontal != 0)
@@ -83,11 +83,11 @@ public class PlayerBehaviour : MonoBehaviour
         controll.Move(movement);   
     }
 
-    public void BotaoInteracao_A()
+    public void InteractionButton_A()
     {
         print("pei pou");
     }
-    public void BotaoInteracao_B()
+    public void InteractionButton_B()
     {
         print("POOOOOOOOOUW");
     }

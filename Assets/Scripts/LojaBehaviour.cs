@@ -9,6 +9,7 @@ public class LojaBehaviour : MonoBehaviour
     Vector3 posicaoCameraInicial,AngulacaoInicial;
     GameObject[,] itens;  
     
+    // MUDAR O NOME DOS METODOS E ATRIBUDOS CLASSE ETC PARA INGLES
     void EntrandoLoja()
     {
         Camera.main.GetComponent<CameraBehaviour>().SetPosicaoCamera(new Vector3(26,4,38),new Vector3(9.5f,-53f,-0.9f));
@@ -33,11 +34,5 @@ public class LojaBehaviour : MonoBehaviour
     }
     void Update()
     {
-        // atualizar pro new input system   
-        // // placeholder test
-        // if(Input.GetKeyDown(KeyCode.Z))
-        // {
-        //     EntrandoLoja();
-        // }
     }
 }

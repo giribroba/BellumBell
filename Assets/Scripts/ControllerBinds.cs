@@ -17,7 +17,7 @@ public class ControllerBinds
     const float acceleration = 0.1f;
 
     //camera
-    private float xAxisCamSensi = 1, yAxisCamSensi = 1;
+    private float xAxisCamSensi = 1, yAxisCamSensi = 1.3f;
 
     public float XAxisCamSensi
     {
