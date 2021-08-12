@@ -17,7 +17,7 @@ public class ConfigMenu : MonoBehaviour
         get => crrntBinds;
     }
 
-    void Start()
+    void Awake()
     {
         file = Application.persistentDataPath + "/Save/Config.json";
         if (!File.Exists(file))
@@ -42,6 +42,7 @@ public class ConfigMenu : MonoBehaviour
         Directory.CreateDirectory(Application.persistentDataPath + "/Save/");
         File.Create(file).Close();
         File.WriteAllText(file, crrntBinds.ToJson());
+        this.UpdateButtons();
     }
     public void UpdateButtons()
     {
@@ -49,17 +50,24 @@ public class ConfigMenu : MonoBehaviour
 
         xBar = sensi[0].transform.GetComponent<Scrollbar>();
         yBar = sensi[1].transform.GetComponent<Scrollbar>();
+
+        xBar.onValueChanged.RemoveAllListeners();
+        yBar.onValueChanged.RemoveAllListeners();
+
         xBar.value = crrntBinds.XAxisCamSensi / 3;
         yBar.value = crrntBinds.YAxisCamSensi / 3;
 
+        print(crrntBinds.XAxisCamSensi);
+        print(crrntBinds.YAxisCamSensi);
 
         sensi[0].transform.GetChild(1).GetComponent<Text>().text = (xBar.value * 3).ToString("n3");
         sensi[1].transform.GetChild(1).GetComponent<Text>().text = (yBar.value * 3).ToString("n3");
-        crrntBinds.XAxisCamSensi = xBar.value * 3;
-        crrntBinds.YAxisCamSensi = yBar.value * 3;
 
-        xBar.onValueChanged.AddListener((float val) => UpdateScrollStringValue(val, sensi[0].transform.GetChild(1).GetComponent<Text>()));
+        UpdateScrollStringValue(xBar.value, sensi[0].transform.GetChild(1).GetComponent<Text>());
+        UpdateScrollStringValue(yBar.value, sensi[1].transform.GetChild(1).GetComponent<Text>());
+
         yBar.onValueChanged.AddListener((float val) => UpdateScrollStringValue(val, sensi[1].transform.GetChild(1).GetComponent<Text>()));
+        xBar.onValueChanged.AddListener((float val) => UpdateScrollStringValue(val, sensi[0].transform.GetChild(1).GetComponent<Text>()));
     }
     public void UpdateScrollStringValue(float value, Text text)
     {
@@ -67,6 +75,8 @@ public class ConfigMenu : MonoBehaviour
 
         crrntBinds.XAxisCamSensi = xBar.value * 3;
         crrntBinds.YAxisCamSensi = yBar.value * 3;
+
+        this.Save();
     }
 
     public void Save()
