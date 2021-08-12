@@ -8,6 +8,7 @@ public class ConfigMenu : MonoBehaviour
 {
     GameObject[] sensi;
     Scrollbar xBar, yBar;
+    float _xAxisCamSensi, _yAxisCamSensi;
     string file;
     static ControllerBinds crrntBinds;
 
@@ -30,13 +31,6 @@ public class ConfigMenu : MonoBehaviour
 
         UpdateButtons();
     }
-    void Update()
-    {
-        sensi[0].transform.GetChild(1).GetComponent<Text>().text = (xBar.value * 3).ToString("n3");
-        sensi[1].transform.GetChild(1).GetComponent<Text>().text = (yBar.value * 3).ToString("n3");
-        crrntBinds.XAxisCamSensi = xBar.value * 3;
-        crrntBinds.YAxisCamSensi = yBar.value * 3;
-    }
 
     public void LoadScene(string target)
     {
@@ -51,14 +45,28 @@ public class ConfigMenu : MonoBehaviour
     }
     public void UpdateButtons()
     {
-        var buttonBinds = GameObject.FindGameObjectsWithTag("BtnBind");
-        var bindArray = crrntBinds.BindsValuesArray();
         sensi = GameObject.FindGameObjectsWithTag("Sensi");
 
         xBar = sensi[0].transform.GetComponent<Scrollbar>();
         yBar = sensi[1].transform.GetComponent<Scrollbar>();
         xBar.value = crrntBinds.XAxisCamSensi / 3;
         yBar.value = crrntBinds.YAxisCamSensi / 3;
+
+
+        sensi[0].transform.GetChild(1).GetComponent<Text>().text = (xBar.value * 3).ToString("n3");
+        sensi[1].transform.GetChild(1).GetComponent<Text>().text = (yBar.value * 3).ToString("n3");
+        crrntBinds.XAxisCamSensi = xBar.value * 3;
+        crrntBinds.YAxisCamSensi = yBar.value * 3;
+
+        xBar.onValueChanged.AddListener((float val) => UpdateScrollStringValue(val, sensi[0].transform.GetChild(1).GetComponent<Text>()));
+        yBar.onValueChanged.AddListener((float val) => UpdateScrollStringValue(val, sensi[1].transform.GetChild(1).GetComponent<Text>()));
+    }
+    public void UpdateScrollStringValue(float value, Text text)
+    {
+        text.text = (value * 3).ToString("n3");
+
+        crrntBinds.XAxisCamSensi = xBar.value * 3;
+        crrntBinds.YAxisCamSensi = yBar.value * 3;
     }
 
     public void Save()
