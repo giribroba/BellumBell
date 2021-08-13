@@ -42,7 +42,8 @@ public class ConfigMenu : MonoBehaviour
         Directory.CreateDirectory(Application.persistentDataPath + "/Save/");
         File.Create(file).Close();
         File.WriteAllText(file, crrntBinds.ToJson());
-        this.UpdateButtons();
+        UpdateButtons();
+        Save();
     }
     public void UpdateButtons()
     {
@@ -56,9 +57,6 @@ public class ConfigMenu : MonoBehaviour
 
         xBar.value = crrntBinds.XAxisCamSensi / 3;
         yBar.value = crrntBinds.YAxisCamSensi / 3;
-
-        print(crrntBinds.XAxisCamSensi);
-        print(crrntBinds.YAxisCamSensi);
 
         sensi[0].transform.GetChild(1).GetComponent<Text>().text = (xBar.value * 3).ToString("n3");
         sensi[1].transform.GetChild(1).GetComponent<Text>().text = (yBar.value * 3).ToString("n3");

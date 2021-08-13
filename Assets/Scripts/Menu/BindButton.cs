@@ -7,7 +7,6 @@ public class BindButton : MonoBehaviour
     [SerializeField] ConfigMenu config;
     [SerializeField] string thisName;
 
-    KeyCode pressedKey;
     GameObject[] buttonBinds; 
 
     [HideInInspector] public bool choosing;

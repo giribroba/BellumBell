@@ -370,8 +370,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 143, y: 164.99998}
-  m_SizeDelta: {x: 217.3714, y: 70.27092}
+  m_AnchoredPosition: {x: 145.8, y: 164.99998}
+  m_SizeDelta: {x: 223.0603, y: 70.27092}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &153390273
 MonoBehaviour:
@@ -2106,17 +2106,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 859616189}
         m_MethodName: Redefine
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Bar
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 859616189}
-        m_MethodName: UpdateButtons
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

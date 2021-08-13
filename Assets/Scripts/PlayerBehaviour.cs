@@ -1,16 +1,18 @@
 ﻿using Cinemachine;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    [SerializeField] GameObject configMenu;
     [SerializeField] CharacterController controll;
     [SerializeField] CinemachineVirtualCamera cinemachine;
     [SerializeField] Canvas canvas;
     [SerializeField] float normalSpeed, suavityTime, rotationSpeed;
-    [SerializeField] GameObject panel , mobileHud;
-    [SerializeField] AnimationCurve speedCurve;
+    [SerializeField] GameObject panel, mobileHud;
+    [SerializeField] AnimationCurve speedCurve, menuAnimSizeCurve;
 
-    ControllerBinds cBinds =  new ConfigMenu().CrrntBinds;
+    ControllerBinds cBinds;
     CinemachinePOV POV;
     Joystick joyPlayer, joyCamera;
     float vertical, horizontal, moveTime;
@@ -21,9 +23,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
         POV.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
-        POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
+
         POV.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
-        POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
+
 #if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -35,17 +37,28 @@ public class PlayerBehaviour : MonoBehaviour
         POV.m_VerticalAxis.m_InputAxisName = "";
 #endif
     }
+    private void Start()
+    {
+        cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
+        configMenu.transform.localScale = Vector3.zero;
+        POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
+        POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
+    }
 
     void Update()
     {
         Movimentation();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
     }
 
     private void Movimentation()
     {
 #if UNITY_STANDALONE
-            vertical = cBinds.Axis(vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
-            horizontal = cBinds.Axis(horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
+        vertical = cBinds.Axis(vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
+        horizontal = cBinds.Axis(horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
 #elif UNITY_ANDROID
             vertical = joyPlayer.Vertical * 6;
             POV.m_HorizontalAxis.m_InputAxisValue = joyCamera.Horizontal;
@@ -80,7 +93,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         movement += Physics.gravity / 20;
 
-        controll.Move(movement);   
+        controll.Move(movement);
     }
 
     public void InteractionButton_A()
@@ -101,7 +114,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.tag == "AreaTrigger")
+        if (other.tag == "AreaTrigger")
         {
             //print("1");
             ShowPanel(panel);
@@ -113,6 +126,54 @@ public class PlayerBehaviour : MonoBehaviour
         {
             //print("2");
             ClosePanel(panel);
+        }
+    }
+
+    private void Pause()
+    {
+        if (Time.timeScale != 0)
+        {
+            Time.timeScale = 0;
+            POV.m_HorizontalAxis.m_MaxSpeed = 0;
+            POV.m_VerticalAxis.m_MaxSpeed = 0;
+
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+
+            StartCoroutine(AnimMenuSize(configMenu, 1, true));
+        }
+        else
+        {
+            cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
+            configMenu.GetComponent<ConfigMenu>().Save();
+            Time.timeScale = 1;
+            POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
+            POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            StartCoroutine(AnimMenuSize(configMenu, 1, false));
+        }
+    }
+
+    private IEnumerator AnimMenuSize(GameObject menu, float time, bool positive)
+    {
+        if (positive)
+        {
+            for (float i = 0; i < time; i += Time.fixedDeltaTime)
+            {
+                menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(i / time);
+                yield return null;
+            }
+        }
+        else
+        {
+            for (float i = time; i > 0; i -= Time.fixedDeltaTime)
+            {
+                menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(i / time);
+                yield return null;
+            }
         }
     }
 }
