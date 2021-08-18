@@ -1,0 +1,19 @@
+{
+    "menu":
+    {
+        "initialButton":"SOLO GAME",
+        "multiplayerButton":"MULTIPLAYER",
+        "credits":"CREDITS"
+    },
+    "cards":
+    [{
+        "name": "ANONYMOUS",
+        "description": "card without attributes"
+    }, {   
+        "name":"TROUBADOR",
+        "description":"realy nice card"
+    }, {
+        "name":"boring man",
+        "description":"card such a boring"
+    }]
+}

@@ -1,8 +1,8 @@
-﻿using Cinemachine;
+using Cinemachine;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerBehaviour : MonoBehaviour
+public class CharacterBehaviour : MonoBehaviour
 {
     [SerializeField] GameObject configMenu;
     [SerializeField] CharacterController controll;

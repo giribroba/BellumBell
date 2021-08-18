@@ -1,0 +1,20 @@
+{
+    "menu":
+    {
+        "initialButton":"JOGO SOLO",
+        "multiplayerButton":"DOIS JOGADORES",
+        "credits":"Créditos"
+    },
+    "cards":
+    [{
+        "name": "ANONIMA",
+        "description": "carta sem atributos"
+    },{   
+        
+        "name":"TROVADOR",
+        "description":"Ataque: 1+/-1 para todas as cartas"
+    }, {
+        "name":"mano chato",
+        "description":"carta muito chata"
+    }]
+}
