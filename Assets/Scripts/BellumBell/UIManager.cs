@@ -10,29 +10,58 @@ public class UIManager : MonoBehaviour
     [SerializeField] AnimationCurve menuAnimSizeCurve, panelAnimSizeCurve;
     [SerializeField] CinemachineVirtualCamera cinemachine;
     [SerializeField] CharacterBehaviour player;
+    [SerializeField] Joystick joyPlayer, joyCamera;
+
+    ControllerBinds cBinds;
+    CinemachinePOV POV;
 
     void Awake()
     {
-        player.POView = cinemachine.AddCinemachineComponent<CinemachinePOV>();
-        player.POView.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
-        player.POView.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
+        POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
+        POV.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
+        POV.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
 
 #if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 #elif UNITY_ANDROID
         mobileHud.setActive(true);
-        player.POView.m_HorizontalAxis.m_InputAxisName = "";
-        player.POView.m_VerticalAxis.m_InputAxisName = "";
+        POV.m_HorizontalAxis.m_InputAxisName = "";
+        POV.m_VerticalAxis.m_InputAxisName = "";
+
+        joyPlayer = GameObject.Find("JoystickPlayer").GetComponent<Joystick>();
+        joyCamera = GameObject.Find("JoystickCamera").GetComponent<Joystick>();
 #endif
     }
 
     void Start()
     {
-        player.CBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
+        cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
         configMenu.transform.localScale = Vector3.zero;
-        player.POView.m_HorizontalAxis.m_MaxSpeed = player.CBinds.XAxisCamSensi;
-        player.POView.m_VerticalAxis.m_MaxSpeed = player.CBinds.YAxisCamSensi;
+        POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
+        POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
+    }
+
+    void Update()
+    {  
+        MoveInputs();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
+    }
+
+    public void MoveInputs()
+    {
+#if UNITY_STANDALONE
+        player.Vertical = cBinds.Axis(player.Vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
+        player.Horizontal = cBinds.Axis(player.Horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
+        player.Running = Input.GetKey(cBinds.GetKey("Run"));
+#elif UNITY_ANDROID
+            player.Vertical = joyPlayer.Vertical * 6;
+            player.Horizontal = joyPlayer.Horizontal * 6;
+#endif
     }
 
     public void Pause()
@@ -40,8 +69,8 @@ public class UIManager : MonoBehaviour
         if (Time.timeScale != 0)
         {
             Time.timeScale = 0;
-            player.POView.m_HorizontalAxis.m_MaxSpeed = 0;
-            player.POView.m_VerticalAxis.m_MaxSpeed = 0;
+            POV.m_HorizontalAxis.m_MaxSpeed = 0;
+            POV.m_VerticalAxis.m_MaxSpeed = 0;
 
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
@@ -50,11 +79,11 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            player.CBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
+            cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
             configMenu.GetComponent<ConfigMenu>().Save();
             Time.timeScale = 1;
-            player.POView.m_HorizontalAxis.m_MaxSpeed = player.CBinds.XAxisCamSensi;
-            player.POView.m_VerticalAxis.m_MaxSpeed = player.CBinds.YAxisCamSensi;
+            POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
+            POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
