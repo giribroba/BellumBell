@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 2301914377867227007}
-  dissolveMaterial: {fileID: 2100000, guid: 997bc960ef433c144885a0ee4eb88626, type: 2}
+  dissolveMaterial: {fileID: 2100000, guid: 6ba385d226ed37143b922a5c02427b7c, type: 2}
   dissolveAnimSpeed: 1.2
 --- !u!222 &2301914377867227004
 CanvasRenderer:
@@ -372,7 +372,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3e04be88aeb9cd5459cbe074c180c1ff, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7267b7dac08359a4fa2395a83078765e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -706,7 +706,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c11ff3836bd14694ca90b4e4aee45acc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0f126e59ec18fcc49a2051216946c2c3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

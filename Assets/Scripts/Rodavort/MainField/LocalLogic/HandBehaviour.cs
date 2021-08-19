@@ -91,6 +91,8 @@ public class HandBehaviour : MonoBehaviour
         
     }
 
+
+    #region HandActions
     void CreateCard(uint index = 0) // if index == 0, the card will not have information (Enemy card)
     { 
 
@@ -116,7 +118,6 @@ public class HandBehaviour : MonoBehaviour
             StartCoroutine(ShowInitializedCard(newCard));
         }    
     }
-
     public void AddCard(int cardPosInHand,Card card)
     {
         hand.Insert(cardPosInHand,card);
@@ -136,7 +137,47 @@ public class HandBehaviour : MonoBehaviour
 
         return removedCard;
     }
+    public void OrganizeHand()
+    {
+        if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}
+        organizeHandCurrentCoroutine = StartCoroutine(OrganizeHandAnim(playerHandAnimation,hand));
+    }
+    public void SetCardsHandRaycast(bool condition)
+    {
+        foreach(Card card in hand)
+        {
+            card.SetRaycastGraphic(condition);
+        }
+    }
+    
+    #endregion
 
+    #region AnimationCommands
+    void ChangeHandSize(float size,List<Card> paramHand)
+    {
+      
+        for(int i = 0;i < paramHand.Count;i++)
+        {       
+            paramHand[i].ChangeSize(size,handAnimationSpeed);
+        }      
+             
+    }
+    public void ShowAmplifiedHand()
+    {
+        if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}     
+        organizeHandCurrentCoroutine = StartCoroutine(OrganizeHandAnim(showingHandAnimation,hand));
+
+        ChangeHandSize(showingHandSize,hand);
+
+    }
+    public void StopShowingAmplifiedHand()
+    {
+        
+        if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}
+        organizeHandCurrentCoroutine = StartCoroutine(OrganizeHandAnim(playerHandAnimation,hand));
+
+        ChangeHandSize(handCardSize,hand);
+    }
     void SetCardsPosition(HandAnimationSettings animSett,List<Card> paramHand)
     {
         RectTransform rectCard;
@@ -169,7 +210,9 @@ public class HandBehaviour : MonoBehaviour
             index ++;
         }
     }
-
+    #endregion
+   
+    #region CoroutineAnimations
     IEnumerator ShowInitializedCard(Card card)
     {
         //x its constant, y its smooth. both are 1 when the another be 1
@@ -203,11 +246,6 @@ public class HandBehaviour : MonoBehaviour
         }      
     }
     
-    public void OrganizeHand()
-    {
-        if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}
-        organizeHandCurrentCoroutine = StartCoroutine(OrganizeHandAnim(playerHandAnimation,hand));
-    }
     public IEnumerator OrganizeHandAnim(HandAnimationSettings animSett,List<Card> paramHand)
     {
         RectTransform rectCard;
@@ -233,39 +271,9 @@ public class HandBehaviour : MonoBehaviour
             yield return null;
         }
     }
+   
+   #endregion
 
-    void ChangeHandSize(float size,List<Card> paramHand)
-    {
-      
-        for(int i = 0;i < paramHand.Count;i++)
-        {       
-            paramHand[i].ChangeSize(size,handAnimationSpeed);
-        }      
-             
-    }
-    public void ShowAmplifiedHand()
-    {
-        if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}     
-        organizeHandCurrentCoroutine = StartCoroutine(OrganizeHandAnim(showingHandAnimation,hand));
-
-        ChangeHandSize(showingHandSize,hand);
-
-    }
-    public void StopShowingAmplifiedHand()
-    {
-        
-        if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}
-        organizeHandCurrentCoroutine = StartCoroutine(OrganizeHandAnim(playerHandAnimation,hand));
-
-        ChangeHandSize(handCardSize,hand);
-    }
-    public void SetCardsHandRaycast(bool condition)
-    {
-        foreach(Card card in hand)
-        {
-            card.SetRaycastGraphic(condition);
-        }
-    }
 
     // organizar cartas 
     // remover carta da mão
