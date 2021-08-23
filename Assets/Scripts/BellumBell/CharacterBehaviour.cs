@@ -1,4 +1,3 @@
-using Cinemachine;
 using System.Collections;
 using UnityEngine;
 
@@ -6,8 +5,7 @@ public class CharacterBehaviour : MonoBehaviour
 {
     [SerializeField] CharacterController controll;
     [SerializeField] Canvas canvas;
-    [SerializeField] float normalSpeed, suavityTime, rotationSpeed;
-    [SerializeField] GameObject panel;
+    [SerializeField] float normalSpeed, rotationSpeed;
     [SerializeField] AnimationCurve speedCurve;
 
     public float Vertical {get{ return vertical; } set{ vertical = value;}}
@@ -16,7 +14,6 @@ public class CharacterBehaviour : MonoBehaviour
 
     bool running = false;
     float vertical, horizontal, moveTime;
-    ControllerBinds cBinds;
     Quaternion targetRotation;
     Vector3 movement;
 
@@ -55,39 +52,4 @@ public class CharacterBehaviour : MonoBehaviour
 
         controll.Move(movement);
     }
-
-    public void InteractionButton_A()
-    {
-        print("pei pou");
-    }
-    public void InteractionButton_B()
-    {
-        print("POOOOOOOOOUW");
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "AreaTrigger")
-        {
-            //print("1");
-            //OpenPanel();
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "AreaTrigger")
-        {
-            //print("2");
-            //ClosePanel();
-        }
-    }
-
-    // private IEnumerator OpenPanel()
-    // {
-
-    // }
-    // private IEnumerator ClosePanel()
-    // {
-
-    // }
 }

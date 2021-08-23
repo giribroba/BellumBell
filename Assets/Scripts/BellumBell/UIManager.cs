@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
@@ -7,11 +7,13 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject configMenu;
     [SerializeField] GameObject mobileHud;
-    [SerializeField] AnimationCurve menuAnimSizeCurve, panelAnimSizeCurve;
+    [SerializeField] AnimationCurve menuAnimSizeCurve;
     [SerializeField] CinemachineVirtualCamera cinemachine;
     [SerializeField] CharacterBehaviour player;
     [SerializeField] Joystick joyPlayer, joyCamera;
 
+    float menuAnimCurrentTime;
+    Coroutine lastCoroutine;
     ControllerBinds cBinds;
     CinemachinePOV POV;
 
@@ -59,13 +61,16 @@ public class UIManager : MonoBehaviour
         player.Horizontal = cBinds.Axis(player.Horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
         player.Running = Input.GetKey(cBinds.GetKey("Run"));
 #elif UNITY_ANDROID
-            player.Vertical = joyPlayer.Vertical * 6;
-            player.Horizontal = joyPlayer.Horizontal * 6;
+        player.Vertical = joyPlayer.Vertical * 6;
+        player.Horizontal = joyPlayer.Horizontal * 6;
 #endif
     }
 
     public void Pause()
     {
+        if(lastCoroutine != null)
+            StopCoroutine(lastCoroutine);
+
         if (Time.timeScale != 0)
         {
             Time.timeScale = 0;
@@ -74,8 +79,6 @@ public class UIManager : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-
-            StartCoroutine(AnimMenuSize(configMenu, 1, true));
         }
         else
         {
@@ -87,28 +90,39 @@ public class UIManager : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            StartCoroutine(AnimMenuSize(configMenu, 1, false));
         }
+        
+        lastCoroutine = StartCoroutine(AnimMenuSize(configMenu, 1, Time.timeScale != 0));
     }
 
-    private IEnumerator AnimMenuSize(GameObject menu, float time, bool positive)
+    private IEnumerator AnimMenuSize(GameObject menu, float time, bool isOpen)
     {
-        if (positive)
+        if (!isOpen)
         {
-            for (float i = 0; i < time; i += Time.fixedDeltaTime)
+            while (menuAnimCurrentTime < time)
             {
-                menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(i / time);
+                menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(menuAnimCurrentTime / time);
+                menuAnimCurrentTime += Time.fixedDeltaTime;
                 yield return null;
             }
         }
         else
         {
-            for (float i = time; i > 0; i -= Time.fixedDeltaTime)
+            while (menuAnimCurrentTime > 0)
             {
-                menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(i / time);
+                menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(menuAnimCurrentTime / time);
+                menuAnimCurrentTime -= Time.fixedDeltaTime;
                 yield return null;
             }
         }
+    }
+
+    public void InteractionButton_A()
+    {
+        print("pei pou");
+    }
+    public void InteractionButton_B()
+    {
+        print("POOOOOOOOOUW");
     }
 }
