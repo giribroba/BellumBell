@@ -5,7 +5,7 @@ public class CharacterBehaviour : MonoBehaviour
 {
     [SerializeField] CharacterController controll;
     [SerializeField] Canvas canvas;
-    [SerializeField] float normalSpeed, rotationSpeed;
+    [SerializeField] float normalSpeed, rotationSpeed, distanceRaycast;
     [SerializeField] AnimationCurve speedCurve;
 
     public float Vertical {get{ return vertical; } set{ vertical = value;}}
@@ -20,6 +20,7 @@ public class CharacterBehaviour : MonoBehaviour
     void Update()
     {
         Movimentation();
+        RaycastInteract();
     }
 
     private void Movimentation()
@@ -51,5 +52,14 @@ public class CharacterBehaviour : MonoBehaviour
         movement += Physics.gravity / 20;
 
         controll.Move(movement);
+    }
+    private void RaycastInteract()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distanceRaycast, LayerMask.GetMask("Interact")))
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+                hit.transform.gameObject.GetComponent<IInteract>().Interact();
+        }    
     }
 }

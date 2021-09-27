@@ -1707,7 +1707,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303023094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -42.808075, y: -7.477734, z: -113.1425}
+  m_LocalPosition: {x: -43.498024, y: -7.4777102, z: -113.1425}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1929,12 +1929,6 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panelAnimSizeCurve:
-    serializedVersion: 2
-    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -3606,9 +3600,8 @@ MonoBehaviour:
   controll: {fileID: 946598867}
   canvas: {fileID: 2499853347922614859}
   normalSpeed: 60
-  suavityTime: 30
   rotationSpeed: 800
-  panel: {fileID: 709260687}
+  distanceRaycast: 20
   speedCurve:
     serializedVersion: 2
     m_Curve:
@@ -6820,7 +6813,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647445507}
   m_LocalRotation: {x: -0.014799136, y: -0, z: -0, w: 0.9998905}
-  m_LocalPosition: {x: -42.150433, y: -7.384812, z: -122.30239}
+  m_LocalPosition: {x: -43.070683, y: -7.384812, z: -122.30239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 473954810}
@@ -8217,7 +8210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2019882522}
   - component: {fileID: 2019882521}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: AreaTrigger
   m_Icon: {fileID: 0}
@@ -8245,7 +8238,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2019882520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49, y: -30.9, z: -66.9}
+  m_LocalPosition: {x: -46.5, y: -30.9, z: -66.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
