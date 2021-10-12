@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: DissolveMaterial
-  m_Shader: {fileID: 4800000, guid: 1696d4a2ea649174481a9ef5cdaf5f2f, type: 3}
+  m_Shader: {fileID: 4800000, guid: 847b15336e0d5244d985dc5247693ca0, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

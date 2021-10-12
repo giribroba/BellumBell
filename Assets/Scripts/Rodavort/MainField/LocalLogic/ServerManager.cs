@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ServerManager : MonoBehaviour
 {
-
-    Player player1,player2;
-    struct Player {List<CardsInfo> Hand,BoardHand;}
+    GameManager gameManager;
+    List<Player> players;
+    struct Player {
+        List<CardsInfo> Hand,BoardHand;     
+        }
 
     void Start()
     {
