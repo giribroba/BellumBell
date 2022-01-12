@@ -1,12 +1,8 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Card",menuName = "Cards/Normal")]
-public class CardsInfo : ScriptableObject
+[CreateAssetMenu(fileName = "New Card",menuName = "Card/Minion")]
+public class CardsInfo : CardBaseInfo
 {
-    public uint cardId;
-
-    [Header("Reading")]
-    public Sprite design;
     
     [Header("Attributes")]
     public int gold;

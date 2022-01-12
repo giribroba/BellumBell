@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         //needs server manager to work completly
         //removedCard.ReceiveStartInfo(cardInfo);
 
-        adversaryPlayer.TryPutCardOnBoard(removedCard);
+        adversaryPlayer.PutCardOnBoard(removedCard);
     }
     void Update()
     {

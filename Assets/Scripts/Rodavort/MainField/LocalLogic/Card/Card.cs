@@ -73,8 +73,8 @@ public class Card : MonoBehaviour
         Power = info.power;
         design.sprite = info.design;
 
-        nameText.text = JsonReader.ReceiveLenguageTexts(UserPrefs.lenguage).cards[cardId].name;
-        descText.text = JsonReader.ReceiveLenguageTexts(UserPrefs.lenguage).cards[cardId].description;
+        nameText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].name;
+        descText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].description;
 
     }
     public void ChangeSize(float size, float animationSpeed)

@@ -13,7 +13,7 @@ public class PlayerBehaviour : MonoBehaviour
     int life;
     int gold;
 
-    public void TryPutCardOnBoard(Card card)
+    public void PutCardOnBoard(Card card)
     {
         //if server receive
         if(true)

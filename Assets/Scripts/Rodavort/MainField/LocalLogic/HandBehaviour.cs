@@ -102,7 +102,7 @@ public class HandBehaviour : MonoBehaviour
             Card newCard = refCard.transform.GetChild(0).GetComponent<Card>();
             handActualCount++;
             
-            CardsInfo cardInfo = Resources.Load<CardsInfo>("Db/DbCardsAttributes/" + index.ToString());
+            CardsInfo cardInfo = Resources.Load<CardsInfo>("Cards/Attributes/" + index.ToString());
             newCard.ReceiveStartInfo(cardInfo);
 
             if(index == 0)

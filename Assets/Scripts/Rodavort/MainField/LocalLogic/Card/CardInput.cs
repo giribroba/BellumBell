@@ -6,17 +6,14 @@ using UnityEngine.EventSystems;
 
 public class CardInput :  MonoBehaviour ,IPointerExitHandler, IPointerEnterHandler,IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-
     [SerializeField] Card actualCard;
     
     PlayerBehaviour player;
     HandInput handBoard;
     HandBehaviour playerHand;
     
-
     float handlingCardSize = 0.7f;
     
-
     void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerBehaviour>();
@@ -63,14 +60,14 @@ public class CardInput :  MonoBehaviour ,IPointerExitHandler, IPointerEnterHandl
             foreach(var parents in eventData.hovered)
                 if(parents.gameObject.tag == "PlayerBoard")
                 {
-                    player.TryPutCardOnBoard(actualCard);
+                    player.PutCardOnBoard(actualCard);
 
                     playerHand.SetCardsHandRaycast(true);
                     handBoard.SetHandRaycast(true);
 
                     return;
                 }
-
+                
         }
 
         ReturnCardToHand();

@@ -5,12 +5,20 @@ using UnityEngine;
 
 public class JsonReader:MonoBehaviour
 {
+    public static TranslatedTexts TranslateTo(string Language)
+    {
+        TextAsset jsonInfo = Resources.Load<TextAsset>("i18n/" + Language);
+        TranslatedTexts lenguageReader = JsonUtility.FromJson<TranslatedTexts>(jsonInfo.text);
+        return lenguageReader;
+    }
     void Start()
     {
-        //tests
-        print(JsonReader.ReceiveLenguageTexts("eng").cards[1].description);
-        print(JsonReader.ReceiveLenguageTexts("pt-br").cards[1].description);
+        //examples
+        print(JsonReader.TranslateTo("eng").cards[1].description);
+        print(JsonReader.TranslateTo("pt-br").cards[1].description);
     }
+#region serialization
+
     [Serializable]
     public class TranslatedTexts
     {
@@ -29,11 +37,7 @@ public class JsonReader:MonoBehaviour
         public string name;
         public string description;
     }
+    
+#endregion
 
-    public static TranslatedTexts ReceiveLenguageTexts(string Language)
-    {
-        TextAsset jsonInfo = Resources.Load<TextAsset>("Db/TextLanguage/" + Language);
-        TranslatedTexts lenguageReader = JsonUtility.FromJson<TranslatedTexts>(jsonInfo.text);
-        return lenguageReader;
-    }
 }
