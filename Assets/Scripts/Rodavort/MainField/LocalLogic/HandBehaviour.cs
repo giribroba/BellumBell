@@ -9,7 +9,6 @@ public class HandBehaviour : MonoBehaviour
 
     const int MaxCardInHand = 10;
 
-    [SerializeField] GameObject cardPrefab;
     [SerializeField] public GameObject cardsToHand,cardsToBoard;
     
     [SerializeField] public bool isAdversaryPlayer;
@@ -98,13 +97,13 @@ public class HandBehaviour : MonoBehaviour
 
         if(handActualCount < MaxCardInHand)
         {
-            GameObject refCard = Instantiate(cardPrefab,cardsToHand.transform);
-            Card newCard = refCard.transform.GetChild(0).GetComponent<Card>();
+            CardsInfo cardInfo = Resources.Load<CardsInfo>("Cards/Attributes/" + index.ToString());
+            Card newCard = InstantiateCardByType(cardInfo.typeCard);
+
+            newCard.ReceiveStartInfo(cardInfo);
+            
             handActualCount++;
             
-            CardsInfo cardInfo = Resources.Load<CardsInfo>("Cards/Attributes/" + index.ToString());
-            newCard.ReceiveStartInfo(cardInfo);
-
             if(index == 0)
             {
                 newCard.GetComponent<Image>().sprite = cardInfo.design;
@@ -148,6 +147,25 @@ public class HandBehaviour : MonoBehaviour
         {
             card.SetRaycastGraphic(condition);
         }
+    }
+    public Card InstantiateCardByType(TypeCard type)
+    {   
+        GameObject refCard;
+   
+           switch(type)
+            {
+                case TypeCard.Spell:
+                    GameObject spellPrefab = Resources.Load<GameObject>("Cards/Prefabs/SpellCard");
+                    refCard = Instantiate(spellPrefab,cardsToHand.transform);
+                    Card spellCard = refCard.transform.GetChild(0).GetComponent<Spell>();
+                    return spellCard;
+                case TypeCard.Minion:
+                    GameObject minionPrefab = Resources.Load<GameObject>("Cards/Prefabs/MinionCard");
+                    refCard = Instantiate(minionPrefab,cardsToHand.transform);
+                    Card minionCard = refCard.transform.GetChild(0).GetComponent<Minion>();
+                    return minionCard;
+            }
+            return new Card();
     }
     
     #endregion

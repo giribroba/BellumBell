@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,8 +6,8 @@ public class Card : MonoBehaviour
 {
     #region Attributes
 
-    uint cardId;
-    int life, gold, power;
+    protected uint cardId;
+    int gold;
 
     [HideInInspector]
     public CardsInfo initialInfo;
@@ -29,18 +29,7 @@ public class Card : MonoBehaviour
     #endregion
 
     #region Properties
-
-    int Life
-    {
-        get => life;
-        set
-        {
-            life = value;
-            lifeText.text = life.ToString();
-        }
-    }
-
-    int Gold
+    protected int Gold
     {
         get => gold;
         set
@@ -49,30 +38,24 @@ public class Card : MonoBehaviour
             goldText.text = gold.ToString();
         }
     }
-    int Power
-    {
-        get => power;
-        set
-        {
-            power = value;
-            powerText.text = power.ToString();
-        }
-    }
+   
 
     #endregion
 
     #region Methods
 
-    public void ReceiveStartInfo(CardsInfo info)
+    public virtual void ReceiveStartInfo(CardsInfo info)
     {
+        print("apenas uma carta");
         initialInfo = info;
 
         cardId = info.cardId;
-        Life = info.life;
         Gold = info.gold;
-        Power = info.power;
+
         design.sprite = info.design;
 
+        
+        
         nameText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].name;
         descText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].description;
 

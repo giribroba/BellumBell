@@ -41,14 +41,16 @@ public class HandBoardBehaviour : MonoBehaviour
 
     public void CreateCard(Card cardInfo)
     {
+        
+        Card newBoardCard = InstantiateCardByType(cardInfo.initialInfo.typeCard);
 
-        GameObject newCard = Instantiate(cardPrefab,this.transform);
-        Card cardAttributes = newCard.transform.GetChild(0).GetComponent<Card>();
-        CardAnimation cardAnim = cardAttributes.transform.GetComponent<CardAnimation>();
+        if(!newBoardCard) return;
 
-        cardAttributes.ReceiveStartInfo(cardInfo.initialInfo);
+        CardAnimation cardAnim = newBoardCard.transform.GetComponent<CardAnimation>();
 
-        handBoard.Add(cardAttributes);
+        newBoardCard.ReceiveStartInfo(cardInfo.initialInfo);
+
+        handBoard.Add(newBoardCard);
 
         float boardWidth = (handBoard.Count-1) * handSizeIncreaseValue;
 
@@ -65,6 +67,26 @@ public class HandBoardBehaviour : MonoBehaviour
         if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}
         organizeHandCurrentCoroutine = StartCoroutine(handBehave.OrganizeHandAnim(boardAnimationSettings,handBoard));
 
+    }
+       public Card InstantiateCardByType(TypeCard type)
+    {   
+        GameObject refCard;
+   
+           switch(type)
+            {
+                case TypeCard.Spell:
+                    DoSpellThings();
+                    return null;
+                case TypeCard.Minion:
+                    GameObject minionPrefab = Resources.Load<GameObject>("Cards/Prefabs/MinionBoardCard");
+                    refCard = Instantiate(minionPrefab,this.transform);
+                    Card minionCard = refCard.transform.GetChild(0).GetComponent<Minion>();
+                    return minionCard;
+            }
+            return null;
+    }
+   void DoSpellThings(){
+       //example
     }
     public Vector2 CalculeCardFinalPosition(int handCount)
     {    
