@@ -9,7 +9,6 @@ public class HandBehaviour : MonoBehaviour
 
     const int MaxCardInHand = 10;
 
-    [SerializeField] GameObject[] cardPrefab;
     [SerializeField] public GameObject cardsToHand,cardsToBoard;
     
     [SerializeField] public bool isAdversaryPlayer;
@@ -149,7 +148,7 @@ public class HandBehaviour : MonoBehaviour
             card.SetRaycastGraphic(condition);
         }
     }
-    private Card InstantiateCardByType(TypeCard type)
+    public Card InstantiateCardByType(TypeCard type)
     {   
         GameObject refCard;
    
@@ -159,7 +158,6 @@ public class HandBehaviour : MonoBehaviour
                     GameObject spellPrefab = Resources.Load<GameObject>("Cards/Prefabs/SpellCard");
                     refCard = Instantiate(spellPrefab,cardsToHand.transform);
                     Card spellCard = refCard.transform.GetChild(0).GetComponent<Spell>();
-                    print("asdasd");
                     return spellCard;
                 case TypeCard.Minion:
                     GameObject minionPrefab = Resources.Load<GameObject>("Cards/Prefabs/MinionCard");
