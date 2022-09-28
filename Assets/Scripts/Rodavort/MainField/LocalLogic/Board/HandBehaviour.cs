@@ -83,10 +83,7 @@ public class HandBehaviour : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Z))
         {
             if(isPlayer)
-            {
                 CreateCard(1);
-                Debug.Log("TESTETESTRE");
-            }
             else
             {
                 CreateCard(0);
@@ -244,7 +241,7 @@ public class HandBehaviour : MonoBehaviour
         card.finalAngle = Quaternion.Euler(0,0,playerHandAnimation.ZAngleOffSet);
        
 
-        card.MoveTo(initCardAnimationSpeed,initCardXMaxCurvePos,initCardYMaxCurvePos);
+        card.StartToMove(initCardAnimationSpeed,initCardXMaxCurvePos,initCardYMaxCurvePos);
         card.ChangeSize(showingHandSize,initCardAnimationSpeed);
             
         yield return new WaitForSeconds(initCardShowTime);

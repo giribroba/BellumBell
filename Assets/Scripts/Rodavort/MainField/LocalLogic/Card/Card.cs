@@ -46,7 +46,6 @@ public class Card : MonoBehaviour
 
     public virtual void ReceiveStartInfo(CardsInfo info)
     {
-        print("apenas uma carta");
         initialInfo = info;
 
         cardId = info.cardId;
@@ -66,7 +65,7 @@ public class Card : MonoBehaviour
         if (changeSizeAnimation != null) { StopCoroutine(changeSizeAnimation); }
         changeSizeAnimation = StartCoroutine(SizeAnimation(size, animationSpeed));
     }
-    public void MoveTo(float animationSpeed, float cardXMaxCurve, float cardYMaxCurve)
+    public void StartToMove(float animationSpeed, float cardXMaxCurve, float cardYMaxCurve)
     {
         if (moveToAnimation != null) { StopCoroutine(moveToAnimation); }
         moveToAnimation = StartCoroutine(MoveToAnimation(animationSpeed, cardXMaxCurve, cardYMaxCurve));

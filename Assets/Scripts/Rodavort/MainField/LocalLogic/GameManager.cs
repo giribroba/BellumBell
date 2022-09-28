@@ -10,10 +10,18 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] MulliganBehaviour mulligan;
 
-    
+
+    enum GameState 
+    {
+        StartGame,
+        CoinFlip,
+        Mulligan,
+        PlayerOne,
+        PlayerTwo,
+        EndGame
+    }
     void EnemyPutCardOnBoard(/*CardsInfo cardInfo,*/int posInHand)
     {   
-        //this will change on realse. only test intent
 
         if(adversaryPlayer.hand.handActualCount == 0) return;
 
@@ -21,7 +29,7 @@ public class GameManager : MonoBehaviour
 
         adversaryPlayer.hand.OrganizeHand();
 
-        //needs server manager to work completly
+        //needs server manager to work completly in multiplayer
         //removedCard.ReceiveStartInfo(cardInfo);
 
         adversaryPlayer.PutCardOnBoard(removedCard);
