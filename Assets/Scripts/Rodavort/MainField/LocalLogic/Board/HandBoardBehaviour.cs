@@ -68,7 +68,7 @@ public class HandBoardBehaviour : MonoBehaviour
         organizeHandCurrentCoroutine = StartCoroutine(handBehave.OrganizeHandAnim(boardAnimationSettings,handBoard));
 
     }
-       public Card InstantiateCardByType(TypeCard type)
+    private Card InstantiateCardByType(TypeCard type)
     {   
         GameObject refCard;
    

@@ -11,7 +11,7 @@ public class HandBehaviour : MonoBehaviour
 
     [SerializeField] public GameObject cardsToHand,cardsToBoard;
     
-    [SerializeField] public bool isAdversaryPlayer;
+    [SerializeField] public bool isPlayer;
 
     [Header("Initial Created Card Settings")]
     [SerializeField] float initCardAnimationSpeed;
@@ -64,7 +64,7 @@ public class HandBehaviour : MonoBehaviour
         playerHandAnimation = new HandAnimationSettings(handOffset,ZangleOffSet,maxHandAngle,handWidthMultiplier,handXAxisWidth,true);
         showingHandAnimation = new HandAnimationSettings(showingHandOffset,ZangleOffSet,maxShowingAngle,showingHandWidthMultiplier,handXAxisWidth,true);
         
-        if(isAdversaryPlayer)
+        if(!isPlayer)
         {
         CreateCard();CreateCard();CreateCard();
         }
@@ -82,10 +82,15 @@ public class HandBehaviour : MonoBehaviour
         //test will be removed on realese
         if(Input.GetKeyDown(KeyCode.Z))
         {
-            if(!isAdversaryPlayer)
+            if(isPlayer)
+            {
                 CreateCard(1);
+                Debug.Log("TESTETESTRE");
+            }
             else
+            {
                 CreateCard(0);
+            }
         }   
         
     }
@@ -148,7 +153,7 @@ public class HandBehaviour : MonoBehaviour
             card.SetRaycastGraphic(condition);
         }
     }
-    public Card InstantiateCardByType(TypeCard type)
+    private Card InstantiateCardByType(TypeCard type)
     {   
         GameObject refCard;
    
@@ -165,7 +170,7 @@ public class HandBehaviour : MonoBehaviour
                     Card minionCard = refCard.transform.GetChild(0).GetComponent<Minion>();
                     return minionCard;
             }
-            return new Card();
+            return null;
     }
     
     #endregion
@@ -252,8 +257,9 @@ public class HandBehaviour : MonoBehaviour
         
         if (organizeHandCurrentCoroutine != null) {StopCoroutine(organizeHandCurrentCoroutine);}
         
-        if(!isAdversaryPlayer && GetComponent<HandInput>().pointerOnBoard)
+        if(isPlayer && GetComponent<HandInput>().pointerOnBoard)
         {
+            //continue with amplified hand if the player already is point to hand
             ShowAmplifiedHand();
             SetCardsHandRaycast(true);
         }

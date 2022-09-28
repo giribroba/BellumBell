@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlayerBehaviour currentPlayer;
     [SerializeField] PlayerBehaviour adversaryPlayer;
 
+    [SerializeField] MulliganBehaviour mulligan;
+
     
     void EnemyPutCardOnBoard(/*CardsInfo cardInfo,*/int posInHand)
     {   
