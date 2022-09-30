@@ -9,9 +9,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlayerBehaviour adversaryPlayer;
 
     [SerializeField] MulliganBehaviour mulligan;
-
-
-    enum GameState 
+    private GameStatus gameState;
+    public enum GameStatus 
     {
         StartGame,
         CoinFlip,
@@ -20,7 +19,22 @@ public class GameManager : MonoBehaviour
         PlayerTwo,
         EndGame
     }
-    void EnemyPutCardOnBoard(/*CardsInfo cardInfo,*/int posInHand)
+    public GameStatus GameState
+    {
+        get {return gameState;}
+        set {
+                gameState = value;
+                
+                print($"GameState changed to: {gameState}");
+                Invoke(gameState.ToString(), 0);
+            }
+    }
+
+    void CoinFlip()
+    {
+        print("MOEDA GIROU");
+    }
+    public void EnemyPutCardOnBoard(/*CardsInfo cardInfo,*/int posInHand)
     {   
 
         if(adversaryPlayer.hand.handActualCount == 0) return;
@@ -34,14 +48,5 @@ public class GameManager : MonoBehaviour
 
         adversaryPlayer.PutCardOnBoard(removedCard);
     }
-    void Update()
-    {
-        //WILL BE REMOVE ON REALESE (TEST ONLY)
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            EnemyPutCardOnBoard(0);
-        }
-    }
     
-
 }

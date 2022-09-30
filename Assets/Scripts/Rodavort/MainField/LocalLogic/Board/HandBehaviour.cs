@@ -175,11 +175,8 @@ public class HandBehaviour : MonoBehaviour
     #region AnimationCommands
     void ChangeHandSize(float size,List<Card> paramHand)
     {
-      
-        for(int i = 0;i < paramHand.Count;i++)
-        {       
-            paramHand[i].ChangeSize(size,handAnimationSpeed);
-        }      
+        for(int i = 0;i < paramHand.Count;i++)     
+            paramHand[i].ChangeSize(size,handAnimationSpeed);     
              
     }
     public void ShowAmplifiedHand()
@@ -282,10 +279,11 @@ public class HandBehaviour : MonoBehaviour
            
             foreach(Card card in paramHand)
             { 
+                //LERP THE POSITION
                 rectCard = card.transform.parent as RectTransform;
                 rectCard.anchoredPosition = Vector3.Lerp(card.startPosition,card.finalPosition,y);
 
-                // ROTATE ONLY THE CARD AND NOT THE GRPAHIC_COLLIDER
+                // ROTATE LERP ONLY THE CARD AND NOT THE GRAPHIC_COLLIDER
                 rectCard = card.transform as RectTransform;
                 rectCard.transform.rotation = Quaternion.Lerp(card.startAngle,card.finalAngle,y);              
             }
@@ -294,12 +292,5 @@ public class HandBehaviour : MonoBehaviour
     }
    
    #endregion
-
-
-    // organizar cartas 
-    // remover carta da mão
-    // adicionar carta da mão
-    // adicionar carta ao campo
-    // remover carta do campo
   
 }
