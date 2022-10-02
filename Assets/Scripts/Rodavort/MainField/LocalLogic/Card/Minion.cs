@@ -34,4 +34,11 @@ public class Minion : Card
         Power = info.power;
 
     }
+    public override Card OnHandBoardInstantiate(Transform boardTransform)
+    {
+        GameObject minionPrefab = Resources.Load<GameObject>("Cards/Prefabs/MinionBoardCard");
+        minionPrefab = Instantiate(minionPrefab, boardTransform);
+        
+        return minionPrefab.transform.GetChild(0).GetComponent<Minion>();;
+    }
 }

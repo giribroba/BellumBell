@@ -7,7 +7,7 @@ public class Spell : Card
     public override void ReceiveStartInfo(CardsInfo info)
     {
         base.ReceiveStartInfo(info);
-        print("eu sou uma spell");
+         print("i'm a spell");
         // base.initialInfo = info;
 
         // base.cardId = info.cardId;
@@ -19,5 +19,10 @@ public class Spell : Card
         // base.nameText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].name;
         // base.descText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].description;
 
+    }
+    public override Card OnHandBoardInstantiate(Transform boardTransform)
+    {
+        print("do spell thing");
+        return null;
     }
 }

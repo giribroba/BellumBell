@@ -59,6 +59,12 @@ public class Card : MonoBehaviour
         descText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].description;
 
     }
+    public virtual Card OnHandBoardInstantiate(Transform boardTransform)
+    {
+        print("some type of card who havent action");
+        return null;
+    }
+    
     public void ChangeSize(float size, float animationSpeed)
     {
         startSize = transform.GetComponent<RectTransform>().localScale;
