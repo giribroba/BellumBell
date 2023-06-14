@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Cinemachine;
 
 public class UIManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] CharacterBehaviour player;
     [SerializeField] Joystick joyPlayer, joyCamera;
 
+    PlayerInputActions inputActions;
     float menuAnimCurrentTime;
     Coroutine lastCoroutine;
     ControllerBinds cBinds;
@@ -22,6 +24,10 @@ public class UIManager : MonoBehaviour
         POV = cinemachine.AddCinemachineComponent<CinemachinePOV>();
         POV.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
         POV.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
+
+        inputActions = new PlayerInputActions();
+        SetInputs();
+        inputActions.Walking.Enable();
 
 #if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.Locked;
@@ -47,11 +53,12 @@ public class UIManager : MonoBehaviour
     void Update()
     {  
         MoveInputs();
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Pause();
-        }
+    public void SetInputs()
+    {
+        inputActions.Walking.Pause.started += Pause;
+        inputActions.Paused.Close.started += Pause;
     }
 
     public void MoveInputs()
@@ -66,13 +73,17 @@ public class UIManager : MonoBehaviour
 #endif
     }
 
-    public void Pause()
+    public void Pause(InputAction.CallbackContext context)
     {
-        if(lastCoroutine != null)
+        if (lastCoroutine != null)
             StopCoroutine(lastCoroutine);
 
+        //Pause
         if (Time.timeScale != 0)
         {
+            inputActions.Walking.Disable();
+            inputActions.Paused.Enable();
+
             Time.timeScale = 0;
             POV.m_HorizontalAxis.m_MaxSpeed = 0;
             POV.m_VerticalAxis.m_MaxSpeed = 0;
@@ -80,8 +91,13 @@ public class UIManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
         }
+
+        //Unpause
         else
         {
+            inputActions.Walking.Enable();
+            inputActions.Paused.Disable();
+
             cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
             configMenu.GetComponent<ConfigMenu>().Save();
             Time.timeScale = 1;
