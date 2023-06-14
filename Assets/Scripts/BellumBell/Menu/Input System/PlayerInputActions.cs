@@ -44,6 +44,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""412b984b-4377-4954-ad66-55da6db71186"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera"",
+                    ""type"": ""Value"",
+                    ""id"": ""6b70bb1a-f811-4be4-9bb9-06152f1faf05"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -72,7 +90,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""WASD"",
                     ""id"": ""700ef0d6-b138-46c2-b539-1c3d8725e06f"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -132,6 +150,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfd24195-6a70-4a5d-a9fc-03ddd52c3ace"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aedb5d38-55df-4bd0-be31-e9b1fb67f250"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1b986da-37f2-4f39-ad6a-6743ca78bd69"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -194,6 +245,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Walking = asset.FindActionMap("Walking", throwIfNotFound: true);
         m_Walking_Pause = m_Walking.FindAction("Pause", throwIfNotFound: true);
         m_Walking_Walk = m_Walking.FindAction("Walk", throwIfNotFound: true);
+        m_Walking_Run = m_Walking.FindAction("Run", throwIfNotFound: true);
+        m_Walking_Camera = m_Walking.FindAction("Camera", throwIfNotFound: true);
         // Paused
         m_Paused = asset.FindActionMap("Paused", throwIfNotFound: true);
         m_Paused_Close = m_Paused.FindAction("Close", throwIfNotFound: true);
@@ -260,12 +313,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IWalkingActions> m_WalkingActionsCallbackInterfaces = new List<IWalkingActions>();
     private readonly InputAction m_Walking_Pause;
     private readonly InputAction m_Walking_Walk;
+    private readonly InputAction m_Walking_Run;
+    private readonly InputAction m_Walking_Camera;
     public struct WalkingActions
     {
         private @PlayerInputActions m_Wrapper;
         public WalkingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_Walking_Pause;
         public InputAction @Walk => m_Wrapper.m_Walking_Walk;
+        public InputAction @Run => m_Wrapper.m_Walking_Run;
+        public InputAction @Camera => m_Wrapper.m_Walking_Camera;
         public InputActionMap Get() { return m_Wrapper.m_Walking; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -281,6 +338,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Walk.started += instance.OnWalk;
             @Walk.performed += instance.OnWalk;
             @Walk.canceled += instance.OnWalk;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
+            @Camera.started += instance.OnCamera;
+            @Camera.performed += instance.OnCamera;
+            @Camera.canceled += instance.OnCamera;
         }
 
         private void UnregisterCallbacks(IWalkingActions instance)
@@ -291,6 +354,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Walk.started -= instance.OnWalk;
             @Walk.performed -= instance.OnWalk;
             @Walk.canceled -= instance.OnWalk;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
+            @Camera.started -= instance.OnCamera;
+            @Camera.performed -= instance.OnCamera;
+            @Camera.canceled -= instance.OnCamera;
         }
 
         public void RemoveCallbacks(IWalkingActions instance)
@@ -358,6 +427,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     {
         void OnPause(InputAction.CallbackContext context);
         void OnWalk(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
+        void OnCamera(InputAction.CallbackContext context);
     }
     public interface IPausedActions
     {

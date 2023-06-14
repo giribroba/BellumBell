@@ -15,15 +15,21 @@ public class UIManager : MonoBehaviour
     ControllerBinds cBinds;
 
     void Awake()
-    {
+    { 
+        Application.targetFrameRate = 144;
 #if UNITY_STANDALONE
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 #elif UNITY_ANDROID
-        mobileHud.setActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        mobileHud.SetActive(true);
 #endif
     }
 
+    public void SetRun(InputAction.CallbackContext context)
+    {
+
+    }
     public void Pause(InputAction.CallbackContext context)
     {
         if (lastCoroutine != null)
@@ -37,9 +43,10 @@ public class UIManager : MonoBehaviour
 
             Time.timeScale = 0;
             virtualCam.enabled = false;
-
-            Cursor.lockState = CursorLockMode.Confined;
+#if UNITY_STANDALONE
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+#endif
         }
 
         //Unpause
@@ -52,9 +59,10 @@ public class UIManager : MonoBehaviour
             configMenu.GetComponent<ConfigMenu>().Save();
             Time.timeScale = 1;
             virtualCam.enabled = true;
-
+#if UNITY_STANDALONE
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+#endif
         }
 
         lastCoroutine = StartCoroutine(AnimMenuSize(configMenu, 1, Time.timeScale != 0));
@@ -67,6 +75,7 @@ public class UIManager : MonoBehaviour
             while (menuAnimCurrentTime < time)
             {
                 menu.transform.localScale = Vector3.one * menuAnimSizeCurve.Evaluate(menuAnimCurrentTime / time);
+                var finish = Time.realtimeSinceStartup + 5;
                 menuAnimCurrentTime += Time.fixedDeltaTime;
                 yield return null;
             }
