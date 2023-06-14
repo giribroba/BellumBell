@@ -12,7 +12,7 @@ public class Minion : Card
         set
         {
             power = value;
-            powerText.text = power.ToString();
+            // powerText.text = power.ToString();
         }
     }
 
@@ -22,7 +22,7 @@ public class Minion : Card
         set
         {
             life = value;
-            lifeText.text = life.ToString();
+            // lifeText.text = life.ToString();
         }
     }
 

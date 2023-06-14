@@ -12,7 +12,7 @@ public class Card : MonoBehaviour
     [HideInInspector]
     public CardsInfo initialInfo;
 
-    Vector2 startSize;
+    Vector3 startSize;
     Coroutine changeSizeAnimation, moveToAnimation;
 
     [Header("UI card references")]
@@ -35,7 +35,7 @@ public class Card : MonoBehaviour
         set
         {
             gold = value;
-            goldText.text = gold.ToString();
+            // goldText.text = gold.ToString();
         }
     }
    
@@ -51,12 +51,12 @@ public class Card : MonoBehaviour
         cardId = info.cardId;
         Gold = info.gold;
 
-        design.sprite = info.design;
+        // design.sprite = info.design;
 
         
         
-        nameText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].name;
-        descText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].description;
+        // nameText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].name;
+        // descText.text = JsonReader.TranslateTo(UserPrefs.lenguage).cards[cardId].description;
 
     }
     public virtual Card OnHandBoardInstantiate(Transform boardTransform)
@@ -68,25 +68,28 @@ public class Card : MonoBehaviour
     public void ChangeSize(float size, float animationSpeed)
     {
         startSize = transform.GetComponent<RectTransform>().localScale;
-        if (changeSizeAnimation != null) { StopCoroutine(changeSizeAnimation); }
+        if (changeSizeAnimation is not null)
+            StopCoroutine(changeSizeAnimation);
         changeSizeAnimation = StartCoroutine(SizeAnimation(size, animationSpeed));
     }
     public void StartToMove(float animationSpeed, float cardXMaxCurve, float cardYMaxCurve)
     {
-        if (moveToAnimation != null) { StopCoroutine(moveToAnimation); }
+        if (moveToAnimation is not null) 
+            StopCoroutine(moveToAnimation);
         moveToAnimation = StartCoroutine(MoveToAnimation(animationSpeed, cardXMaxCurve, cardYMaxCurve));
     }
     IEnumerator SizeAnimation(float size, float animationSpeed)
     {
         RectTransform rectCard;
         float x, y;
+        Vector3 proportion = new Vector3(116,174,1);
         x = 0;
         while (x <= 1)
         {
             x += (animationSpeed * Time.deltaTime);
             y = -x * x + 2 * x;
             rectCard = transform as RectTransform;
-            rectCard.localScale = Vector3.one * Mathf.Lerp(startSize.x, size, y);
+            rectCard.localScale = Vector3.Lerp(startSize, proportion * size, y);
 
             yield return null;
         }

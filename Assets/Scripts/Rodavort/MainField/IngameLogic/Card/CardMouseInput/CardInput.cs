@@ -52,11 +52,17 @@ public class CardInput :  MonoBehaviour ,IPointerExitHandler, IPointerEnterHandl
         playerHand.RemoveCard(actualCard.posInHand);   
         
     }
-    public void OnDrag(PointerEventData eventData) => transform.position = Input.mousePosition;
+    public void OnDrag(PointerEventData eventData) { 
+        Debug.Log("Drag");
+        Debug.Log(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0,0,100)) ;
+    }
     public void OnEndDrag(PointerEventData eventData)
     {
+          Debug.Log("endDrag");
         if(eventData.hovered.Count>0)
         {
+              Debug.Log("endDragR");
             foreach(var parents in eventData.hovered)
                 if(parents.gameObject.tag == "PlayerBoard")
                 {

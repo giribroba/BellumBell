@@ -15,22 +15,22 @@ public class HandBehaviour : MonoBehaviour
 
     [Header("Initial Created Card Settings")]
     [SerializeField] float initCardAnimationSpeed;
-    [SerializeField] float initCardShowTime,sizeInitShowCard,initCardYMaxCurvePos,initCardXMaxCurvePos,maxShowingAngle;
-    [SerializeField] Vector2 startPosInitialCard,finalPosInitialCard;
+    [SerializeField] float initCardShowTime, sizeInitShowCard, initCardYMaxCurvePos, initCardXMaxCurvePos, maxShowingAngle;
+    [SerializeField] Vector2 startPosInitialCard, finalPosInitialCard, startAngleInitialCard, finalAngleInitialCard;
     [SerializeField] float showingHandWidthMultiplier;
 
     
     [Header("Hand Card Settings")]
     
     [SerializeField] float handAnimationSpeed;  
-    [SerializeField] float handXAxisWidth,maxHandAngle,handSizeIncreaseValue,ZangleOffSet;
-    [SerializeField] Vector2 handOffset,showingHandOffset;
+    [SerializeField] float handXAxisWidth, maxHandAngle, handSizeIncreaseValue, ZangleOffSet;
+    [SerializeField] Vector2 handOffset, showingHandOffset, showingHandAngleOffset;
     [SerializeField] float handWidthMultiplier;
 
     [Header("Public Variables")]
     public float showingHandSize,handCardSize;
     
-    HandAnimationSettings playerHandAnimation,showingHandAnimation;
+    HandAnimationSettings playerHandAnimation, showingHandAnimation;
     Coroutine organizeHandCurrentCoroutine;
 
     //the card only its added on final animation of initialized
@@ -39,7 +39,7 @@ public class HandBehaviour : MonoBehaviour
 
     public struct HandAnimationSettings
     {
-        public HandAnimationSettings(Vector2 offSet,float zAngleOffSet,float angulation,float widthMultiplier,float handXWidth,bool playerHand)
+        public HandAnimationSettings(Vector2 offSet, float zAngleOffSet, float angulation, float widthMultiplier, float handXWidth, bool playerHand)
         {
             OffSet = offSet;
             Angulation = angulation;
@@ -61,7 +61,7 @@ public class HandBehaviour : MonoBehaviour
     void Start()
     {
         
-        playerHandAnimation = new HandAnimationSettings(handOffset,ZangleOffSet,maxHandAngle,handWidthMultiplier,handXAxisWidth,true);
+        playerHandAnimation = new HandAnimationSettings(handOffset,ZangleOffSet ,maxHandAngle,handWidthMultiplier,handXAxisWidth,true);
         showingHandAnimation = new HandAnimationSettings(showingHandOffset,ZangleOffSet,maxShowingAngle,showingHandWidthMultiplier,handXAxisWidth,true);
         
         if(!isPlayer)
@@ -221,7 +221,7 @@ public class HandBehaviour : MonoBehaviour
             rectCard = card.transform as RectTransform;
 
             card.startAngle = rectCard.transform.rotation;
-            card.finalAngle = Quaternion.Euler(0,0,paramHand.Count > 2 ?(-concat/animSett.HandXAxisWidth) * animSett.Angulation + animSett.ZAngleOffSet: animSett.ZAngleOffSet);
+            card.finalAngle = Quaternion.Euler(showingHandAngleOffset.x,showingHandAngleOffset.y,paramHand.Count > 2 ?(-concat/animSett.HandXAxisWidth) * animSett.Angulation + animSett.ZAngleOffSet: animSett.ZAngleOffSet);
 
             concat += widthIncreaseConst * 2;   
             index ++;
@@ -234,8 +234,8 @@ public class HandBehaviour : MonoBehaviour
     {
         //x its constant, y its smooth. both are 1 when the another be 1
 
-        card.startAngle = Quaternion.Euler(0,90,90);
-        card.finalAngle = Quaternion.Euler(0,0,playerHandAnimation.ZAngleOffSet);
+        card.startAngle = Quaternion.Euler(startAngleInitialCard);
+        card.finalAngle = Quaternion.Euler(finalAngleInitialCard.x,finalAngleInitialCard.y,playerHandAnimation.ZAngleOffSet);
        
 
         card.StartToMove(initCardAnimationSpeed,initCardXMaxCurvePos,initCardYMaxCurvePos);
