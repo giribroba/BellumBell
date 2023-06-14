@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject configMenu;
     [SerializeField] GameObject mobileHud;
     [SerializeField] AnimationCurve menuAnimSizeCurve;
-    [SerializeField] CinemachineVirtualCamera cinemachine;
+    [SerializeField] CinemachineVirtualCamera virtualCam;
 
     float menuAnimCurrentTime;
     Coroutine lastCoroutine;
@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour
 
     public void Pause(InputAction.CallbackContext context)
     {
-        print("asdasdasd");
         if (lastCoroutine != null)
             StopCoroutine(lastCoroutine);
 
@@ -37,8 +36,7 @@ public class UIManager : MonoBehaviour
             InputManager.inputActions.Paused.Enable();
 
             Time.timeScale = 0;
-            InputManager.POV.m_HorizontalAxis.m_MaxSpeed = 0;
-            InputManager.POV.m_VerticalAxis.m_MaxSpeed = 0;
+            virtualCam.enabled = false;
 
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
@@ -53,8 +51,7 @@ public class UIManager : MonoBehaviour
             cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
             configMenu.GetComponent<ConfigMenu>().Save();
             Time.timeScale = 1;
-            InputManager.POV.m_HorizontalAxis.m_MaxSpeed = cBinds.XAxisCamSensi;
-            InputManager.POV.m_VerticalAxis.m_MaxSpeed = cBinds.YAxisCamSensi;
+            virtualCam.enabled = true;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
