@@ -76,9 +76,9 @@ public class InputManager : MonoBehaviour
         else
             player.Running = inputActions.Walking.RunKeyboard.IsPressed();
 
-        var cam = inputActions.Walking.Camera.ReadValue<Vector2>() * cBinds.XAxisCamSensi;
-        POV.m_HorizontalAxis.Value += cam.x;
-        POV.m_VerticalAxis.Value -= cam.y;
+        var cam = inputActions.Walking.Camera.ReadValue<Vector2>() * Time.deltaTime * 60;
+        POV.m_HorizontalAxis.Value += cam.x * POV.m_HorizontalAxis.m_MaxSpeed;
+        POV.m_VerticalAxis.Value -= cam.y * POV.m_VerticalAxis.m_MaxSpeed;
 #elif UNITY_ANDROID
         //print(joyPlayer.Horizontal * 6);
         player.Vertical = joyPlayer.Vertical * 6;
