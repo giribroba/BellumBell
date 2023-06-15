@@ -46,9 +46,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Run"",
+                    ""name"": ""Run[Keyboard]"",
                     ""type"": ""Button"",
                     ""id"": ""412b984b-4377-4954-ad66-55da6db71186"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run[Gamepad]"",
+                    ""type"": ""Button"",
+                    ""id"": ""82ed459c-3f3d-4bbc-a0f2-68fb1f607a42"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -160,18 +169,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Run"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""aedb5d38-55df-4bd0-be31-e9b1fb67f250"",
-                    ""path"": ""<Gamepad>/leftStickPress"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Run"",
+                    ""action"": ""Run[Keyboard]"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -183,6 +181,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a13dd04b-d789-4915-a86e-4f71f61122bd"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run[Gamepad]"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -245,7 +254,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Walking = asset.FindActionMap("Walking", throwIfNotFound: true);
         m_Walking_Pause = m_Walking.FindAction("Pause", throwIfNotFound: true);
         m_Walking_Walk = m_Walking.FindAction("Walk", throwIfNotFound: true);
-        m_Walking_Run = m_Walking.FindAction("Run", throwIfNotFound: true);
+        m_Walking_RunKeyboard = m_Walking.FindAction("Run[Keyboard]", throwIfNotFound: true);
+        m_Walking_RunGamepad = m_Walking.FindAction("Run[Gamepad]", throwIfNotFound: true);
         m_Walking_Camera = m_Walking.FindAction("Camera", throwIfNotFound: true);
         // Paused
         m_Paused = asset.FindActionMap("Paused", throwIfNotFound: true);
@@ -313,7 +323,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IWalkingActions> m_WalkingActionsCallbackInterfaces = new List<IWalkingActions>();
     private readonly InputAction m_Walking_Pause;
     private readonly InputAction m_Walking_Walk;
-    private readonly InputAction m_Walking_Run;
+    private readonly InputAction m_Walking_RunKeyboard;
+    private readonly InputAction m_Walking_RunGamepad;
     private readonly InputAction m_Walking_Camera;
     public struct WalkingActions
     {
@@ -321,7 +332,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public WalkingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_Walking_Pause;
         public InputAction @Walk => m_Wrapper.m_Walking_Walk;
-        public InputAction @Run => m_Wrapper.m_Walking_Run;
+        public InputAction @RunKeyboard => m_Wrapper.m_Walking_RunKeyboard;
+        public InputAction @RunGamepad => m_Wrapper.m_Walking_RunGamepad;
         public InputAction @Camera => m_Wrapper.m_Walking_Camera;
         public InputActionMap Get() { return m_Wrapper.m_Walking; }
         public void Enable() { Get().Enable(); }
@@ -338,9 +350,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Walk.started += instance.OnWalk;
             @Walk.performed += instance.OnWalk;
             @Walk.canceled += instance.OnWalk;
-            @Run.started += instance.OnRun;
-            @Run.performed += instance.OnRun;
-            @Run.canceled += instance.OnRun;
+            @RunKeyboard.started += instance.OnRunKeyboard;
+            @RunKeyboard.performed += instance.OnRunKeyboard;
+            @RunKeyboard.canceled += instance.OnRunKeyboard;
+            @RunGamepad.started += instance.OnRunGamepad;
+            @RunGamepad.performed += instance.OnRunGamepad;
+            @RunGamepad.canceled += instance.OnRunGamepad;
             @Camera.started += instance.OnCamera;
             @Camera.performed += instance.OnCamera;
             @Camera.canceled += instance.OnCamera;
@@ -354,9 +369,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Walk.started -= instance.OnWalk;
             @Walk.performed -= instance.OnWalk;
             @Walk.canceled -= instance.OnWalk;
-            @Run.started -= instance.OnRun;
-            @Run.performed -= instance.OnRun;
-            @Run.canceled -= instance.OnRun;
+            @RunKeyboard.started -= instance.OnRunKeyboard;
+            @RunKeyboard.performed -= instance.OnRunKeyboard;
+            @RunKeyboard.canceled -= instance.OnRunKeyboard;
+            @RunGamepad.started -= instance.OnRunGamepad;
+            @RunGamepad.performed -= instance.OnRunGamepad;
+            @RunGamepad.canceled -= instance.OnRunGamepad;
             @Camera.started -= instance.OnCamera;
             @Camera.performed -= instance.OnCamera;
             @Camera.canceled -= instance.OnCamera;
@@ -427,7 +445,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     {
         void OnPause(InputAction.CallbackContext context);
         void OnWalk(InputAction.CallbackContext context);
-        void OnRun(InputAction.CallbackContext context);
+        void OnRunKeyboard(InputAction.CallbackContext context);
+        void OnRunGamepad(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
     }
     public interface IPausedActions

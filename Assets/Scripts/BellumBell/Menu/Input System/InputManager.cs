@@ -13,8 +13,10 @@ public class InputManager : MonoBehaviour
     [SerializeField] UIManager uiManager;
 
     public static PlayerInputActions inputActions;
-    ControllerBinds cBinds;
     public static CinemachinePOV POV;
+
+    bool gamepadRunBool;
+    ControllerBinds cBinds;
 
     private void Awake()
     {
@@ -50,11 +52,12 @@ public class InputManager : MonoBehaviour
 
     public void SetInputs()
     {
-        inputActions.Walking.Run.started += SetRun;
+        inputActions.Walking.RunGamepad.started += GamePadRun;
         inputActions.Walking.Pause.started += uiManager.Pause;
         inputActions.Paused.Close.started += uiManager.Pause;
     }
-    public void SetRun(InputAction.CallbackContext context) => player.Running = true;
+
+    public void GamePadRun(InputAction.CallbackContext context) => gamepadRunBool = player.Running = true;
 
     public void MoveInputs()
     {
@@ -64,8 +67,14 @@ public class InputManager : MonoBehaviour
         var walk = inputActions.Walking.Walk.ReadValue<Vector2>();
         player.Horizontal = walk.x;
         player.Vertical = walk.y;
-        if(walk.magnitude <= 0.5f)
-            player.Running = false;
+
+        if (gamepadRunBool)
+        {
+            if (walk.magnitude == 0)
+                player.Running = gamepadRunBool = false;
+        }
+        else
+            player.Running = inputActions.Walking.RunKeyboard.IsPressed();
 
         var cam = inputActions.Walking.Camera.ReadValue<Vector2>() * cBinds.XAxisCamSensi;
         POV.m_HorizontalAxis.Value += cam.x;

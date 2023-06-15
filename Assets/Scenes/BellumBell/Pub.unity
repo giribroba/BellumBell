@@ -1924,6 +1924,7 @@ GameObject:
   - component: {fileID: 342111395}
   - component: {fileID: 342111394}
   - component: {fileID: 342111396}
+  - component: {fileID: 342111397}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -1978,10 +1979,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  cinemachine: {fileID: 1647445508}
-  player: {fileID: 946598868}
-  joyPlayer: {fileID: 2026955388}
-  joyCamera: {fileID: 1468873100}
+  virtualCam: {fileID: 1647445508}
 --- !u!4 &342111395
 Transform:
   m_ObjectHideFlags: 0
@@ -2009,6 +2007,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c2085cc118e5ba409f534991dfbd0dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &342111397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342111393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e865323cd279404cb3ecbb486045966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configMenu: {fileID: 1617663036}
+  virtualCamera: {fileID: 1647445508}
+  player: {fileID: 946598868}
+  joyPlayer: {fileID: 2026955388}
+  joyCamera: {fileID: 1468873100}
+  uiManager: {fileID: 342111394}
 --- !u!1001 &350348384
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -24,9 +24,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Run",
+                    "name": "Run[Keyboard]",
                     "type": "Button",
                     "id": "412b984b-4377-4954-ad66-55da6db71186",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Run[Gamepad]",
+                    "type": "Button",
+                    "id": "82ed459c-3f3d-4bbc-a0f2-68fb1f607a42",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -138,18 +147,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "aedb5d38-55df-4bd0-be31-e9b1fb67f250",
-                    "path": "<Gamepad>/leftStickPress",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Run",
+                    "action": "Run[Keyboard]",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -161,6 +159,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a13dd04b-d789-4915-a86e-4f71f61122bd",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run[Gamepad]",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
