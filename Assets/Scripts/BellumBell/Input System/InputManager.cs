@@ -1,9 +1,8 @@
 using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput), typeof(CinemachinePOV))]
 public class InputManager : MonoBehaviour
 {
     [SerializeField] GameObject configMenu;
@@ -12,7 +11,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] Joystick joyPlayer, joyCamera;
     [SerializeField] UIManager uiManager;
 
-    public static PlayerInputActions inputActions;
+    public static PlayerInput inputActions;
     public static CinemachinePOV POV;
 
     bool gamepadRunBool;
@@ -24,9 +23,8 @@ public class InputManager : MonoBehaviour
         POV.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
         POV.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
 
-        inputActions = new PlayerInputActions();
+        inputActions = this.GetComponent<PlayerInput>();
         SetInputs();
-        inputActions.Walking.Enable();
 
 #if UNITY_ANDROID              
         POV.m_HorizontalAxis.m_InputAxisName = "";
@@ -52,9 +50,20 @@ public class InputManager : MonoBehaviour
 
     public void SetInputs()
     {
-        inputActions.Walking.RunGamepad.started += GamePadRun;
-        inputActions.Walking.Pause.started += uiManager.Pause;
-        inputActions.Paused.Close.started += uiManager.Pause;
+        inputActions.SwitchCurrentActionMap("Paused");
+        #region Paused Mapping
+
+        inputActions.actions["Close"].started += uiManager.Pause;
+
+        #endregion
+
+        inputActions.SwitchCurrentActionMap("Walking");
+        #region Walking Mapping
+
+        inputActions.actions["Run[Gamepad]"].started += GamePadRun;
+        inputActions.actions["Pause"].started += uiManager.Pause;
+
+        #endregion
     }
 
     public void GamePadRun(InputAction.CallbackContext context) => gamepadRunBool = player.Running = true;
@@ -64,7 +73,7 @@ public class InputManager : MonoBehaviour
 #if UNITY_STANDALONE
         //player.Vertical = cBinds.Axis(player.Vertical, cBinds.GetKey("Forward"), cBinds.GetKey("Backward")); //Similar of Input.GetAxis("Vertical")
         //player.Horizontal = cBinds.Axis(player.Horizontal, cBinds.GetKey("Right"), cBinds.GetKey("Left"));  // Similar of Input.GetAxis("Horizontal")
-        var walk = inputActions.Walking.Walk.ReadValue<Vector2>();
+        var walk = inputActions.actions["Walk"].ReadValue<Vector2>();
         player.Horizontal = walk.x;
         player.Vertical = walk.y;
 
@@ -74,9 +83,9 @@ public class InputManager : MonoBehaviour
                 player.Running = gamepadRunBool = false;
         }
         else
-            player.Running = inputActions.Walking.RunKeyboard.IsPressed();
+            player.Running = inputActions.actions["Run[Keyboard]"].IsPressed();
 
-        var cam = inputActions.Walking.Camera.ReadValue<Vector2>() * Time.deltaTime * 60;
+        var cam = inputActions.actions["Camera"].ReadValue<Vector2>() * Time.deltaTime * 60;
         POV.m_HorizontalAxis.Value += cam.x * POV.m_HorizontalAxis.m_MaxSpeed;
         POV.m_VerticalAxis.Value -= cam.y * POV.m_VerticalAxis.m_MaxSpeed;
 #elif UNITY_ANDROID

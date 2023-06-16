@@ -26,10 +26,6 @@ public class UIManager : MonoBehaviour
 #endif
     }
 
-    public void SetRun(InputAction.CallbackContext context)
-    {
-
-    }
     public void Pause(InputAction.CallbackContext context)
     {
         if (lastCoroutine != null)
@@ -38,8 +34,7 @@ public class UIManager : MonoBehaviour
         //Pause
         if (Time.timeScale != 0)
         {
-            InputManager.inputActions.Walking.Disable();
-            InputManager.inputActions.Paused.Enable();
+            InputManager.inputActions.SwitchCurrentActionMap("Paused");
 
             Time.timeScale = 0;
             virtualCam.enabled = false;
@@ -52,8 +47,7 @@ public class UIManager : MonoBehaviour
         //Unpause
         else
         {
-            InputManager.inputActions.Walking.Enable();
-            InputManager.inputActions.Paused.Disable();
+            InputManager.inputActions.SwitchCurrentActionMap("Walking");
 
             cBinds = configMenu.GetComponent<ConfigMenu>().CrrntBinds;
             configMenu.GetComponent<ConfigMenu>().Save();
