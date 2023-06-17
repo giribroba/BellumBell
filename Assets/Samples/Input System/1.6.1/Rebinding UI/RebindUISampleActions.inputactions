@@ -11,7 +11,8 @@
                     "id": "9d8fcbff-87d1-43ef-857e-931c84d5bd72",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Look",
@@ -19,7 +20,8 @@
                     "id": "ddab72da-d325-4b4c-a484-abe4f6bdf113",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Interact",
@@ -27,7 +29,17 @@
                     "id": "2bd60403-0923-469e-a3a4-7338b04f6bbc",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "aa",
+                    "type": "Button",
+                    "id": "5afe00bf-dc8a-41cf-b0b5-0da872ced038",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -138,6 +150,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edac6c14-a918-4c0f-9d36-f30f54b79071",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "aa",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

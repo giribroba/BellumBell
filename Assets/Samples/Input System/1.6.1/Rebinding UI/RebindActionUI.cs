@@ -14,6 +14,29 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     /// </summary>
     public class RebindActionUI : MonoBehaviour
     {
+        GameObject[] allRAUI;
+        private void Start()
+        {
+            allRAUI = GameObject.FindGameObjectsWithTag("BtnBind");
+            UpdateWarning();
+        }
+
+        private void UpdateAllWarnings()
+        {
+            foreach (var item in allRAUI)
+            {
+                item.GetComponent<RebindActionUI>().UpdateWarning();
+            }
+        }
+
+        public void UpdateWarning()
+        {
+            InputAction _Action = m_Action.action;
+            var bID = new Guid(m_BindingId);
+            int bIndex = _Action.bindings.IndexOf(x => x.id == bID);
+
+            m_WarningGO.SetActive(CheckDoubles(_Action, bIndex));
+        }
         /// <summary>
         /// Reference to the action that is to be rebound.
         /// </summary>
@@ -228,6 +251,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 action.RemoveBindingOverride(bindingIndex);
             }
             UpdateBindingDisplay();
+            UpdateAllWarnings();
         }
 
         /// <summary>
@@ -264,6 +288,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+                .WithControlsExcluding("Mouse")
+                .WithCancelingThrough("<Keyboard>/escape")
+                .WithControlsExcluding("<Gamepad>/start")
                 .OnCancel(
                     operation =>
                     {
@@ -271,12 +298,22 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         m_RebindOverlay?.SetActive(false);
                         UpdateBindingDisplay();
                         CleanUp();
+                        UpdateAllWarnings();
                     })
                 .OnComplete(
                     operation =>
                     {
                         m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
+
+                        if (allCompositeParts && CheckDoublesInComposite(action, bindingIndex))
+                        {
+                            action.RemoveBindingOverride(bindingIndex);
+                            CleanUp();
+                            PerformInteractiveRebind(action, bindingIndex, allCompositeParts);
+                            return;
+                        }
+
                         UpdateBindingDisplay();
                         CleanUp();
 
@@ -288,6 +325,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                             if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
                                 PerformInteractiveRebind(action, nextBindingIndex, true);
                         }
+                        UpdateAllWarnings();
                     });
 
             // If it's a part binding, show the name of the part in the UI.
@@ -316,6 +354,55 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             m_RebindOperation.Start();
         }
 
+        private bool CheckDoublesInComposite(InputAction action, int bindingIndex)
+        {
+            InputBinding newBinding = action.bindings[bindingIndex];
+
+            for (int i = 1; i < bindingIndex; i++)
+            {
+                if (action.bindings[i].effectivePath == newBinding.effectivePath)
+                {
+                    rebindPrompt.text = "Invalid or duplicated bind. Please try another.";
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool CheckDoubles(InputAction action, int bindingIndex)
+        {
+            InputBinding thisBinding = action.bindings[bindingIndex];
+
+            if (thisBinding.isComposite)
+            {
+                InputBinding testBinding;
+                for (int i = 0; i < action.bindings.Count; i++)
+                {
+                    testBinding = action.bindings[i];
+                    if (testBinding.isComposite)
+                        continue;
+                    foreach (var item in action.actionMap.bindings)
+                    {
+                        if (item.action == testBinding.action)
+                            continue;
+                        if (item.effectivePath == testBinding.effectivePath)
+                            return true;
+                    }
+                    testBinding = action.bindings[i];
+                }
+            }
+
+            foreach (InputBinding item in action.actionMap.bindings)
+            {
+                if (item.action == thisBinding.action)
+                    continue;
+                if (item.effectivePath == thisBinding.effectivePath)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         protected void OnEnable()
         {
             if (s_RebindActionUIs == null)
@@ -365,6 +452,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
+        [SerializeField]
+        private GameObject m_WarningGO;
+
         [Tooltip("Reference to action that is to be rebound from the UI.")]
         [SerializeField]
         private InputActionReference m_Action;
@@ -413,14 +503,14 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         // We want the label for the action name to update in edit mode, too, so
         // we kick that off from here.
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected void OnValidate()
         {
             UpdateActionLabel();
             UpdateBindingDisplay();
         }
 
-        #endif
+#endif
 
         private void UpdateActionLabel()
         {
