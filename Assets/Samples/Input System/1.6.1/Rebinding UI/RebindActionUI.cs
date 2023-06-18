@@ -15,19 +15,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     public class RebindActionUI : MonoBehaviour
     {
         GameObject[] allRAUI;
-        private void Start()
-        {
-            allRAUI = GameObject.FindGameObjectsWithTag("BtnBind");
-            UpdateWarning();
-        }
-
-        private void UpdateAllWarnings()
-        {
-            foreach (var item in allRAUI)
-            {
-                item.GetComponent<RebindActionUI>().UpdateWarning();
-            }
-        }
 
         public void UpdateWarning()
         {
@@ -211,6 +198,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// </summary>
         public void UpdateBindingDisplay()
         {
+            UpdateWarning();
+
             var displayString = string.Empty;
             var deviceLayoutName = default(string);
             var controlPath = default(string);
@@ -251,7 +240,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 action.RemoveBindingOverride(bindingIndex);
             }
             UpdateBindingDisplay();
-            UpdateAllWarnings();
         }
 
         /// <summary>
@@ -298,7 +286,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         m_RebindOverlay?.SetActive(false);
                         UpdateBindingDisplay();
                         CleanUp();
-                        UpdateAllWarnings();
                     })
                 .OnComplete(
                     operation =>
@@ -325,7 +312,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                             if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
                                 PerformInteractiveRebind(action, nextBindingIndex, true);
                         }
-                        UpdateAllWarnings();
                     });
 
             // If it's a part binding, show the name of the part in the UI.
@@ -457,7 +443,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         [Tooltip("Reference to action that is to be rebound from the UI.")]
         [SerializeField]
-        private InputActionReference m_Action;
+        public InputActionReference m_Action;
 
         [SerializeField]
         private string m_BindingId;
