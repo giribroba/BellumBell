@@ -79,7 +79,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: W/A/S/D
 --- !u!1 &1872262943105908165
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -549, y: 352}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -278.6, y: 29.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4916496554949916195
@@ -517,19 +517,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc11d99b1a6682f4cbc4aba1fcd9ac5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MessageText: {fileID: 0}
   m_WarningGO: {fileID: 1872262943105908165}
-  inputAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_Action: {fileID: 7723093844229559393, guid: 7dead05c54ca85b4681351aafd8bd03a,
-    type: 3}
-  m_BindingId: 076f1159-4d00-4240-9bb2-d48719a9446e
+  m_Action: {fileID: 0}
+  m_BindingId: 
   m_DisplayStringOptions: 0
   m_ActionLabel: {fileID: 9135758187866316491}
   m_BindingText: {fileID: 7265682152290516066}
@@ -579,7 +570,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -131.9, y: 0}
+  m_AnchoredPosition: {x: -226, y: 0}
   m_SizeDelta: {x: 103.7, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7612916853909469640
@@ -623,7 +614,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: NewText
 --- !u!1 &6515312457916448514
 GameObject:
   m_ObjectHideFlags: 0

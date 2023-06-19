@@ -1,19 +1,26 @@
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Samples.RebindUI;
 using UnityEngine.UI;
 
 public class GenerateBindigMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject bindPrefab, startMapNameGO, canvas;
+    [SerializeField] private GameObject bindPrefab, startMapNameGO, test, rebindOverlay;
+    [SerializeField] private Transform canvasTransform;
+    [SerializeField] private Text messageText, rebindText;
     [SerializeField] private InputActionAsset actionAsset;
 
+    private InputActionMap testingMap;
+    private Transform newBindingButtonTransform;
+    private RebindActionUI newRAUI;
+    private InputActionReference actionReference;
+
     private Vector3 pos;
-    void Start()
+
+    void Awake()
     {
-        InputActionMap testingMap;
-        Transform newBindingButton;
-        RebindActionUI newRAUI;
+        var rOverlayTransform = rebindOverlay.transform;
 
         for (int i = 0; i < actionAsset.actionMaps.Count; i++)
         {
@@ -37,17 +44,17 @@ public class GenerateBindigMenu : MonoBehaviour
 
                     pos -= (Vector3.up * 60);
 
-                    newBindingButton = Instantiate(bindPrefab).transform;
-                    newBindingButton.SetParent(canvas.transform);
-                    newBindingButton.localPosition = pos;
-                    newBindingButton.localScale = bindPrefab.transform.localScale;
+                    newBindingButtonTransform = Instantiate(bindPrefab, canvasTransform).transform;
+                    newBindingButtonTransform.localPosition = pos;
 
-                    newRAUI = newBindingButton.GetComponent<RebindActionUI>();
-                    //newRAUI.inputAction = item;
-                    //print(newRAUI.inputAction);
+                    actionReference = ScriptableObject.CreateInstance(typeof(InputActionReference)) as InputActionReference;
+                    actionReference.Set(actionAsset, testingMap.name, bind.action);
+
+                    newRAUI = newBindingButtonTransform.GetComponent<RebindActionUI>();
+                    newRAUI.Init(actionReference, bind.id.ToString(), messageText, rebindText, rebindOverlay);
                 }
             }
-
         }
+        rebindOverlay.transform.SetAsLastSibling();
     }
 }

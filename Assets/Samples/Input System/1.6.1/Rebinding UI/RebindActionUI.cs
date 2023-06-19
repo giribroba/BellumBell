@@ -14,8 +14,19 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     /// </summary>
     public class RebindActionUI : MonoBehaviour
     {
-        GameObject[] allRAUI;
+        public void Init(InputActionReference actionReference, string id, Text messageText, Text rebindText, GameObject rebindOverlay)
+        {
+            m_Action = actionReference;
+            m_BindingId = id;
+            m_MessageText = messageText;
+            m_RebindText = rebindText;
+            m_RebindOverlay = rebindOverlay;
 
+            m_MessageText.text = "";
+
+            UpdateActionLabel();
+            UpdateBindingDisplay();
+        }
         public void UpdateWarning()
         {
             InputAction _Action = m_Action.action;
@@ -282,6 +293,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 .OnCancel(
                     operation =>
                     {
+                        ResetToDefault();
+                        m_MessageText.text = "";
                         m_RebindStopEvent?.Invoke(this, operation);
                         m_RebindOverlay?.SetActive(false);
                         UpdateBindingDisplay();
@@ -348,10 +361,11 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             {
                 if (action.bindings[i].effectivePath == newBinding.effectivePath)
                 {
-                    rebindPrompt.text = "Invalid or duplicated bind. Please try another.";
+                    m_MessageText.text = "Invalid or duplicated bind. Please try another.";
                     return true;
                 }
             }
+            m_MessageText.text = "";
             return false;
         }
         private bool CheckDoubles(InputAction action, int bindingIndex)
@@ -439,11 +453,14 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         }
 
         [SerializeField]
+        private Text m_MessageText;
+
+        [SerializeField]
         private GameObject m_WarningGO;
 
         [Tooltip("Reference to action that is to be rebound from the UI.")]
-        [SerializeField]
-        public InputActionReference m_Action;
+        private InputActionReference m_Action;
+
 
         [SerializeField]
         private string m_BindingId;
@@ -490,11 +507,11 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         // We want the label for the action name to update in edit mode, too, so
         // we kick that off from here.
 #if UNITY_EDITOR
-        protected void OnValidate()
-        {
-            UpdateActionLabel();
-            UpdateBindingDisplay();
-        }
+        //protected void OnValidate()
+        //{
+        //    UpdateActionLabel();
+        //    UpdateBindingDisplay();
+        //}
 
 #endif
 
