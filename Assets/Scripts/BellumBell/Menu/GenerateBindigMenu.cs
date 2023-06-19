@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Samples.RebindUI;
 using UnityEngine.UI;
@@ -10,6 +9,7 @@ public class GenerateBindigMenu : MonoBehaviour
     [SerializeField] private Transform canvasTransform;
     [SerializeField] private Text messageText, rebindText;
     [SerializeField] private InputActionAsset actionAsset;
+    [SerializeField] bool showCompositeByParts;
 
     private InputActionMap testingMap;
     private Transform newBindingButtonTransform;
@@ -39,7 +39,7 @@ public class GenerateBindigMenu : MonoBehaviour
                     continue;
                 foreach (var bind in item.bindings)
                 {
-                    if (bind.isPartOfComposite || bind.ToString().Contains("Gamepad"))
+                    if ((showCompositeByParts ? bind.isComposite : bind.isPartOfComposite) || bind.ToString().Contains("Gamepad"))
                         continue;
 
                     pos -= (Vector3.up * 60);
@@ -55,6 +55,7 @@ public class GenerateBindigMenu : MonoBehaviour
                 }
             }
         }
+
         rebindOverlay.transform.SetAsLastSibling();
     }
 }

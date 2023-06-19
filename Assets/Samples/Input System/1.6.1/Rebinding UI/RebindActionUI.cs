@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static System.Collections.Specialized.BitVector32;
 
 ////TODO: localization support
 
@@ -29,9 +31,13 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         }
         public void UpdateWarning()
         {
+            if(m_Action == null)
+                return;
+
             InputAction _Action = m_Action.action;
             var bID = new Guid(m_BindingId);
             int bIndex = _Action.bindings.IndexOf(x => x.id == bID);
+            UpdateActionLabel();
 
             m_WarningGO.SetActive(CheckDoubles(_Action, bIndex));
         }
@@ -209,7 +215,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// </summary>
         public void UpdateBindingDisplay()
         {
-            UpdateWarning();
 
             var displayString = string.Empty;
             var deviceLayoutName = default(string);
@@ -219,7 +224,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             var action = m_Action?.action;
             if (action != null)
             {
-                var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
+                var bindingIndex = action.bindings.IndexOf(x => x.id == new Guid(m_BindingId));
                 if (bindingIndex != -1)
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
             }
@@ -230,6 +235,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             // Give listeners a chance to configure UI in response.
             m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
+
+            UpdateWarning();
         }
 
         /// <summary>
@@ -368,7 +375,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             m_MessageText.text = "";
             return false;
         }
-        private bool CheckDoubles(InputAction action, int bindingIndex)
+        public bool CheckDoubles(InputAction action, int bindingIndex)
         {
             InputBinding thisBinding = action.bindings[bindingIndex];
 
@@ -459,8 +466,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         private GameObject m_WarningGO;
 
         [Tooltip("Reference to action that is to be rebound from the UI.")]
+        [SerializeField]
         private InputActionReference m_Action;
-
 
         [SerializeField]
         private string m_BindingId;
@@ -507,11 +514,11 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         // We want the label for the action name to update in edit mode, too, so
         // we kick that off from here.
 #if UNITY_EDITOR
-        //protected void OnValidate()
-        //{
-        //    UpdateActionLabel();
-        //    UpdateBindingDisplay();
-        //}
+        protected void OnValidate()
+        {
+            UpdateActionLabel();
+            UpdateBindingDisplay();
+        }
 
 #endif
 
@@ -519,8 +526,18 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         {
             if (m_ActionLabel != null)
             {
-                var action = m_Action?.action;
-                m_ActionLabel.text = action != null ? action.name : string.Empty;
+                if (m_Action == null || m_BindingId == null || m_ActionLabel == null)
+                    return;
+
+                var action = m_Action.action;
+                var bind = action.bindings[m_Action.action.bindings.IndexOf(x => x.id == new Guid(m_BindingId))];
+
+                if (bind != null && bind.isPartOfComposite)
+                {
+                    m_ActionLabel.text = action != null ? $"{action.name} [{bind.name}]" : string.Empty;
+                    return;
+                }
+                m_ActionLabel.text = action != null ? action.name.Split("[")[0] : string.Empty;
             }
         }
 
