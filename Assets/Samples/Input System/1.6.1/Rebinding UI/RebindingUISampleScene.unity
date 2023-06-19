@@ -630,6 +630,7 @@ MonoBehaviour:
   rebindText: {fileID: 3361161002790717161}
   actionAsset: {fileID: -944628639613478452, guid: f796a1b740bb79046bcc90454431a4f7,
     type: 3}
+  showCompositeByParts: 0
 --- !u!1 &508436405
 GameObject:
   m_ObjectHideFlags: 0

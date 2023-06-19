@@ -21,6 +21,7 @@ public class GenerateBindigMenu : MonoBehaviour
     void Awake()
     {
         var rOverlayTransform = rebindOverlay.transform;
+        //var mapNameTransform = startMapNameGO.transform;
 
         for (int i = 0; i < actionAsset.actionMaps.Count; i++)
         {
@@ -29,9 +30,16 @@ public class GenerateBindigMenu : MonoBehaviour
                 continue;
             if (i == 0)
             {
-                pos = startMapNameGO.transform.localPosition;
-                startMapNameGO.transform.GetChild(0).GetComponent<Text>().text = testingMap.name;
+                newBindingButtonTransform = startMapNameGO.transform; ;
+                pos = newBindingButtonTransform.localPosition;
             }
+            else
+            {
+                pos -= (Vector3.up * 60);
+                newBindingButtonTransform = Instantiate(startMapNameGO, canvasTransform).transform;
+                newBindingButtonTransform.localPosition = pos;
+            }
+            newBindingButtonTransform.GetChild(0).GetComponent<Text>().text = testingMap.name;
 
             foreach (var item in testingMap.actions)
             {
